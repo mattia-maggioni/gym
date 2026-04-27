@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Home Gym Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { background: #0a0a0f; color: #e2e8f0; font-family: 'DM Sans', system-ui, sans-serif; min-height: 100vh; overscroll-behavior: none; }
+  button { font-family: 'DM Sans', system-ui, sans-serif; cursor: pointer; }
+  input { font-family: 'DM Mono', monospace; }
+  .view { display: none; min-height: 100vh; padding-bottom: 40px; }
+  .view.active { display: block; }
+
+  /* HOME */
+  .home-header { padding: 52px 20px 20px; border-bottom: 1px solid #1e1e2e; }
+  .home-header p { font-size: 11px; letter-spacing: 3px; color: #6366f1; text-transform: uppercase; font-weight: 500; margin-bottom: 2px; }
+  .home-header h1 { font-size: 26px; font-weight: 600; color: #f1f5f9; }
+  .category-section { padding: 20px 20px 0; }
+  .category-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; margin-bottom: 12px; }
+  .workout-btn { background: #12121a; border: 1px solid #1e1e2e; border-radius: 14px; padding: 16px 18px; text-align: left; color: #e2e8f0; display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 10px; }
+  .workout-btn:active { opacity: 0.7; }
+  .workout-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+  .workout-name { font-size: 15px; font-weight: 500; }
+  .workout-last { font-size: 12px; color: #475569; display: block; margin-top: 4px; padding-left: 16px; }
+  .workout-arrow { font-size: 20px; color: #334155; }
+
+  /* PROGRESS TABS */
+  .progress-section { padding: 28px 20px 0; }
+  .progress-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; margin-bottom: 12px; }
+  .tabs-scroll { overflow-x: auto; margin-bottom: 16px; -webkit-overflow-scrolling: touch; }
+  .tabs-inner { display: flex; gap: 6px; min-width: max-content; }
+  .tab-btn { padding: 6px 12px; font-size: 11px; font-weight: 500; background: transparent; border: 1px solid #1e1e2e; border-radius: 20px; color: #475569; white-space: nowrap; }
+  .tab-btn.active { background: #1e1e2e; }
+  .ex-card { background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; padding: 12px 14px; text-align: left; cursor: pointer; color: #e2e8f0; width: 100%; margin-bottom: 8px; }
+  .ex-card-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .ex-card-name { font-size: 13px; font-weight: 500; color: #cbd5e1; }
+  .ex-card-val { font-size: 13px; font-weight: 600; }
+  .note-card { background: #12121a; border: 1px solid #1e1e2e; border-radius: 10px; padding: 10px 14px; margin-bottom: 6px; }
+  .empty-state { text-align: center; padding: 32px 0; color: #334155; font-size: 14px; }
+
+  /* BACKUP BAR */
+  .backup-bar { margin: 24px 20px 0; background: #12121a; border: 1px solid #1e1e2e; border-radius: 14px; padding: 14px 16px; }
+  .backup-bar p { font-size: 11px; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .backup-btns { display: flex; gap: 8px; }
+  .backup-btn { flex: 1; padding: 9px 12px; border-radius: 10px; font-size: 12px; font-weight: 600; border: none; }
+  .backup-export { background: #6366f133; color: #818cf8; }
+  .backup-import { background: #1e1e2e; color: #64748b; }
+
+  /* SESSION */
+  .session-header { padding: 52px 20px 16px; border-bottom: 1px solid #1e1e2e; display: flex; align-items: center; justify-content: space-between; }
+  .back-btn { background: none; border: none; color: #6366f1; font-size: 22px; padding: 0 8px 0 0; }
+  .session-title-block p { font-size: 11px; color: #6366f1; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
+  .session-title-block span { font-size: 14px; color: #94a3b8; }
+  .note-toggle { border-radius: 8px; padding: 6px 12px; font-size: 13px; }
+  .note-area { padding: 14px 20px; border-bottom: 1px solid #1e1e2e; background: #0d0d14; }
+  .note-textarea { width: 100%; background: #12121a; border: 1px solid #2d2d3a; border-radius: 10px; padding: 10px 12px; color: #e2e8f0; font-size: 14px; font-family: 'DM Sans', system-ui; outline: none; resize: none; line-height: 1.5; }
+  .ex-tabs-scroll { overflow-x: auto; border-bottom: 1px solid #1e1e2e; -webkit-overflow-scrolling: touch; }
+  .ex-tabs-inner { display: flex; padding: 10px 16px; gap: 6px; min-width: max-content; }
+  .ex-tab { padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; border: 1px solid #1e1e2e; background: #12121a; color: #475569; white-space: nowrap; }
+  .ex-tab.active { }
+  .session-body { padding: 20px; }
+  .paired-badge { font-size: 10px; background: #1e293b; color: #94a3b8; padding: 2px 8px; border-radius: 10px; font-weight: 500; display: inline-block; margin-bottom: 8px; }
+  .ex-main-title { font-size: 20px; font-weight: 600; color: #f1f5f9; line-height: 1.3; margin-bottom: 4px; }
+  .ex-rep-range { font-size: 13px; margin-bottom: 6px; }
+  .ex-note { font-size: 12px; color: #475569; margin-bottom: 14px; }
+  .prev-session { background: #0d0d14; border: 1px solid #1e1e2e; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; }
+  .prev-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .prev-sets { display: flex; gap: 6px; flex-wrap: wrap; }
+  .prev-set-chip { font-size: 12px; font-family: 'DM Mono', monospace; padding: 3px 8px; border-radius: 6px; }
+
+  /* TIMER */
+  .timer-block { display: flex; align-items: center; gap: 14px; background: #12121a; border: 1px solid #1e1e2e; border-radius: 14px; padding: 12px 16px; margin-bottom: 16px; transition: border-color 0.3s; }
+  .timer-svg-wrap { position: relative; width: 60px; height: 60px; flex-shrink: 0; }
+  .timer-label { font-size: 12px; font-weight: 600; font-family: 'DM Mono', monospace; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .timer-inner { flex: 1; }
+  .timer-title { font-size: 11px; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .timer-controls { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .timer-play { padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid; }
+  .timer-presets { display: flex; gap: 4px; flex-wrap: wrap; }
+  .timer-preset { padding: 4px 7px; border-radius: 6px; font-size: 10px; font-family: 'DM Mono', monospace; border: 1px solid #1e1e2e; background: transparent; color: #334155; }
+  .timer-preset.sel { background: #1e1e2e; }
+
+  /* SETS */
+  .sets-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+  .set-row { background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .set-num { font-size: 13px; color: #475569; min-width: 20px; font-family: 'DM Mono', monospace; }
+  .set-inputs { flex: 1; display: flex; gap: 10px; }
+  .set-input-wrap { flex: 1; }
+  .set-input-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .set-input { width: 100%; background: #0a0a0f; border: 1px solid #2d2d3a; border-radius: 8px; padding: 8px 10px; color: #f1f5f9; font-size: 15px; font-family: 'DM Mono', monospace; outline: none; }
+  .set-vol { font-size: 11px; font-family: 'DM Mono', monospace; min-width: 36px; text-align: right; }
+  .nav-btns { display: flex; gap: 10px; }
+  .nav-prev { flex: 1; padding: 14px; background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; color: #94a3b8; font-size: 14px; font-weight: 500; }
+  .nav-next { flex: 2; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 600; border: none; }
+
+  /* CHART */
+  .chart-header { padding: 52px 20px 16px; border-bottom: 1px solid #1e1e2e; display: flex; align-items: center; gap: 12px; }
+  .chart-body { padding: 20px; }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .stat-card { background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; padding: 14px 16px; }
+  .stat-card-label { font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .stat-card-val { font-size: 22px; font-weight: 600; font-family: 'DM Mono', monospace; }
+  .stat-card-unit { font-size: 13px; font-weight: 400; }
+  .chart-card { background: #12121a; border: 1px solid #1e1e2e; border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+  .chart-card-label { font-size: 11px; color: #475569; text-transform: uppercase; letter-spacing: 2px; font-weight: 500; margin-bottom: 14px; }
+  .history-table { background: #12121a; border: 1px solid #1e1e2e; border-radius: 12px; overflow: hidden; }
+  .history-table-header { padding: 12px 16px; border-bottom: 1px solid #1e1e2e; display: grid; grid-template-columns: 1fr 1fr 1fr; font-size: 10px; color: #475569; text-transform: uppercase; letter-spacing: 1px; }
+  .history-row { padding: 10px 16px; border-bottom: 1px solid #0a0a0f; display: grid; grid-template-columns: 1fr 1fr 1fr; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<!-- HOME VIEW -->
+<div id="view-home" class="view active">
+  <div class="home-header">
+    <p>Home Gym</p>
+    <h1>Le mie schede</h1>
+  </div>
+  <div id="workout-list"></div>
+  <div class="progress-section">
+    <p class="progress-label">Progressione</p>
+    <div class="tabs-scroll"><div class="tabs-inner" id="progress-tabs"></div></div>
+    <div id="progress-content"></div>
+  </div>
+  <div class="backup-bar">
+    <p>💾 Backup dati</p>
+    <div class="backup-btns">
+      <button class="backup-btn backup-export" onclick="exportBackup()">⬇ Esporta JSON</button>
+      <button class="backup-btn backup-import" onclick="document.getElementById('import-file').click()">⬆ Importa JSON</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBackup(event)">
+    </div>
+  </div>
+</div>
+
+<!-- SESSION VIEW -->
+<div id="view-session" class="view">
+  <div class="session-header">
+    <div style="display:flex;align-items:center;gap:4px">
+      <button class="back-btn" onclick="goHome()">‹</button>
+      <div class="session-title-block">
+        <p id="sess-workout-name"></p>
+        <span id="sess-progress"></span>
+      </div>
+    </div>
+    <button class="note-toggle" id="note-toggle-btn" onclick="toggleNote()">📝 Note</button>
+  </div>
+  <div class="note-area" id="note-area" style="display:none">
+    <textarea class="note-textarea" id="session-note-input" rows="3" placeholder="Stanchezza, dolori, osservazioni..."></textarea>
+  </div>
+  <div class="ex-tabs-scroll"><div class="ex-tabs-inner" id="ex-tabs"></div></div>
+  <div class="session-body" id="session-body"></div>
+</div>
+
+<!-- CHART VIEW -->
+<div id="view-chart" class="view">
+  <div class="chart-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <div>
+      <p id="chart-workout-label" style="font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:500;margin-bottom:2px"></p>
+      <h2 id="chart-ex-name" style="font-size:17px;font-weight:600;color:#f1f5f9"></h2>
+    </div>
+  </div>
+  <div class="chart-body" id="chart-body"></div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const WORKOUTS = {
+  "Upper A (dispari)": [
+    { id: "ua_bench", name: "Panca piana manubri", sets: 4, repRange: "6–8", rest: 150, note: "risc: 2×3 stesso peso" },
+    { id: "ua_wrist", name: "Wrist curl [paired]", sets: 3, repRange: "15–20", rest: 0, note: "durante recupero panca" },
+    { id: "ua_incline", name: "Panca inclinata manubri 25–30°", sets: 3, repRange: "8–10", rest: 120, note: "petto alto" },
+    { id: "ua_rwrist", name: "Reverse wrist curl [paired]", sets: 3, repRange: "15–20", rest: 0, note: "durante recupero inclinata" },
+    { id: "ua_cross", name: "Crossover elastico basso→alto", sets: 3, repRange: "12–15", rest: 60, note: "" },
+    { id: "ua_pullup", name: "Trazioni presa larga", sets: 4, repRange: "max", rest: 120, note: "" },
+    { id: "ua_curl", name: "Curl panca inclinata [paired]", sets: 3, repRange: "8–12", rest: 0, note: "durante recupero trazioni" },
+    { id: "ua_row", name: "Rematore manubrio", sets: 3, repRange: "8–12", rest: 90, note: "" },
+    { id: "ua_revcurl", name: "Reverse curl EZ [paired]", sets: 2, repRange: "8–10", rest: 0, note: "durante recupero rematore" },
+    { id: "ua_ohp", name: "Shoulder press manubri", sets: 4, repRange: "6–8", rest: 120, note: "risc: 2×3 stesso peso" },
+    { id: "ua_reardelt", name: "Rear delt fly su panca inclinata", sets: 3, repRange: "15", rest: 60, note: "gomito guida" },
+    { id: "ua_lateral", name: "Lateral raise unilaterale", sets: 4, repRange: "12–15", rest: 60, note: "sinistro prima, poi destro" },
+    { id: "ua_shrug", name: "Shrug bilanciere", sets: 4, repRange: "10–12", rest: 90, note: "" },
+  ],
+  "Upper A (pari)": [
+    { id: "ua2_ohp", name: "Shoulder press manubri", sets: 4, repRange: "6–8", rest: 120, note: "risc: 2×3 stesso peso" },
+    { id: "ua2_reardelt", name: "Rear delt fly su panca inclinata", sets: 3, repRange: "15", rest: 60, note: "gomito guida" },
+    { id: "ua2_lateral", name: "Lateral raise unilaterale", sets: 4, repRange: "12–15", rest: 60, note: "sinistro prima, poi destro" },
+    { id: "ua2_bench", name: "Panca piana manubri", sets: 4, repRange: "6–8", rest: 150, note: "risc: 2×3 stesso peso" },
+    { id: "ua2_wrist", name: "Wrist curl [paired]", sets: 3, repRange: "15–20", rest: 0, note: "durante recupero panca" },
+    { id: "ua2_incline", name: "Panca inclinata manubri 25–30°", sets: 3, repRange: "8–10", rest: 120, note: "petto alto" },
+    { id: "ua2_rwrist", name: "Reverse wrist curl [paired]", sets: 3, repRange: "15–20", rest: 0, note: "durante recupero inclinata" },
+    { id: "ua2_cross", name: "Crossover elastico basso→alto", sets: 3, repRange: "12–15", rest: 60, note: "" },
+    { id: "ua2_pullup", name: "Trazioni presa larga", sets: 4, repRange: "max", rest: 120, note: "" },
+    { id: "ua2_curl", name: "Curl panca inclinata [paired]", sets: 3, repRange: "8–12", rest: 0, note: "durante recupero trazioni" },
+    { id: "ua2_row", name: "Rematore manubrio", sets: 3, repRange: "8–12", rest: 90, note: "" },
+    { id: "ua2_revcurl", name: "Reverse curl EZ [paired]", sets: 2, repRange: "8–10", rest: 0, note: "durante recupero rematore" },
+    { id: "ua2_shrug", name: "Shrug bilanciere", sets: 4, repRange: "10–12", rest: 90, note: "" },
+  ],
+  "Upper B": [
+    { id: "ub_ohp", name: "Shoulder press bilanciere", sets: 4, repRange: "6–8", rest: 120, note: "risc: 2×3 stesso peso" },
+    { id: "ub_reardelt", name: "Rear delt fly su panca inclinata", sets: 4, repRange: "15", rest: 60, note: "prima del lateral raise" },
+    { id: "ub_lateral", name: "Lateral raise unilaterale", sets: 5, repRange: "12–15", rest: 60, note: "sinistro prima, poi destro" },
+    { id: "ub_dip", name: "Dip corpo libero", sets: 3, repRange: "8–10", rest: 120, note: "zavorra quando arrivi a 3×10" },
+    { id: "ub_wrist", name: "Wrist curl [paired]", sets: 3, repRange: "15–20", rest: 0, note: "durante recupero dip" },
+    { id: "ub_incline", name: "Panca inclinata manubri 25–30°", sets: 4, repRange: "8–10", rest: 120, note: "petto alto" },
+    { id: "ub_rwrist", name: "Reverse wrist curl [paired]", sets: 3, repRange: "15–20", rest: 0, note: "durante recupero inclinata" },
+    { id: "ub_pullup", name: "Trazioni presa neutra", sets: 4, repRange: "max", rest: 120, note: "" },
+    { id: "ub_preacher", name: "Preacher curl [paired]", sets: 3, repRange: "8–12", rest: 0, note: "durante recupero trazioni" },
+    { id: "ub_row", name: "Rematore manubrio", sets: 3, repRange: "8–12", rest: 90, note: "" },
+    { id: "ub_revcurl", name: "Reverse curl EZ [paired]", sets: 2, repRange: "10–12", rest: 0, note: "durante recupero rematore" },
+    { id: "ub_shrug", name: "Shrug bilanciere", sets: 4, repRange: "10–12", rest: 90, note: "" },
+    { id: "ub_facepull", name: "Face pull elastico [paired]", sets: 3, repRange: "15–20", rest: 0, note: "durante recupero shrug" },
+  ],
+  "Lower A": [
+    { id: "la_neck_front", name: "Neck work anteriore", sets: 3, repRange: "15–25", rest: 50, note: "kg opzionale", kgOptional: true },
+    { id: "la_neck_back", name: "Neck work posteriore", sets: 3, repRange: "15–25", rest: 50, note: "kg opzionale", kgOptional: true },
+    { id: "la_neck_side", name: "Neck work laterale", sets: 3, repRange: "15–25", rest: 50, note: "kg opzionale", kgOptional: true },
+    { id: "la_squat", name: "Squat bilanciere", sets: 5, repRange: "5–8", rest: 150, note: "risc: 2×3 stesso peso" },
+    { id: "la_rdl", name: "RDL", sets: 3, repRange: "8–10", rest: 120, note: "risc: 1×5 stesso peso" },
+    { id: "la_bulgarian", name: "Bulgarian split squat", sets: 3, repRange: "8–10", rest: 90, note: "inizia con 4 kg" },
+    { id: "la_crunch", name: "Crunch", sets: 3, repRange: "12–15", rest: 60, note: "kg opzionale", kgOptional: true },
+    { id: "la_revcrunch", name: "Reverse crunch", sets: 3, repRange: "12–15", rest: 60, note: "kg opzionale", kgOptional: true },
+    { id: "la_sideplank", name: "Side plank dinamico", sets: 3, repRange: "12–15", rest: 60, note: "kg opzionale", kgOptional: true },
+  ],
+  "Lower B": [
+    { id: "lb_neck_front", name: "Neck work anteriore", sets: 3, repRange: "15–25", rest: 50, note: "kg opzionale", kgOptional: true },
+    { id: "lb_neck_back", name: "Neck work posteriore", sets: 3, repRange: "15–25", rest: 50, note: "kg opzionale", kgOptional: true },
+    { id: "lb_neck_side", name: "Neck work laterale", sets: 3, repRange: "15–25", rest: 50, note: "kg opzionale", kgOptional: true },
+    { id: "lb_deadlift", name: "Stacco da terra", sets: 3, repRange: "4–6", rest: 180, note: "risc: 2×3 stesso peso" },
+    { id: "lb_bulgarian", name: "Bulgarian split squat", sets: 3, repRange: "8–10", rest: 90, note: "stesso carico di Lower A" },
+    { id: "lb_rdl", name: "RDL", sets: 3, repRange: "8–10", rest: 120, note: "" },
+    { id: "lb_lunges", name: "Affondi", sets: 3, repRange: "10–12", rest: 90, note: "camminati o statici" },
+    { id: "lb_plank", name: "Plank zavorrata", sets: 3, repRange: "30–45\"", rest: 60, note: "kg opzionale", kgOptional: true },
+    { id: "lb_revcrunch", name: "Reverse crunch", sets: 3, repRange: "12–15", rest: 60, note: "kg opzionale", kgOptional: true },
+  ],
+  "Trazioni (Mer/Dom)": [
+    { id: "tr_pullup", name: "Trazioni normali", sets: 3, repRange: "max (RIR 2)", rest: 120, note: "non andare a cedimento" },
+    { id: "tr_negative", name: "Trazioni negative", sets: 3, repRange: "3–5", rest: 90, note: "sali con salto, scendi in 4–5 sec" },
+  ],
+};
+
+const WORKOUT_KEYS = Object.keys(WORKOUTS);
+const COLORS = {
+  "Upper A (dispari)": "#c084fc",
+  "Upper A (pari)": "#818cf8",
+  "Upper B": "#34d399",
+  "Lower A": "#f59e0b",
+  "Lower B": "#fb923c",
+  "Trazioni (Mer/Dom)": "#38bdf8",
+};
+const CATEGORIES = [
+  { label: "Upper", keys: ["Upper A (dispari)", "Upper A (pari)", "Upper B"] },
+  { label: "Lower", keys: ["Lower A", "Lower B"] },
+  { label: "Accessorio", keys: ["Trazioni (Mer/Dom)"] },
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let history = {};
+let selectedWorkout = null;
+let sessionData = {};
+let sessionNote = "";
+let activeEx = 0;
+let showNote = false;
+let progressTab = 0;
+let chartWorkout = null;
+let chartExId = null;
+let audioCtx = null;
+let timerInterval = null;
+let timerDuration = 90;
+let timerRemaining = null;
+let timerRunning = false;
+
+// ─── STORAGE ─────────────────────────────────────────────────────────────────
+function loadHistory() {
+  try { const r = localStorage.getItem("workout_history_v2"); if (r) history = JSON.parse(r); } catch {}
+}
+function saveHistory() {
+  try { localStorage.setItem("workout_history_v2", JSON.stringify(history)); } catch {}
+}
+function exportBackup() {
+  const blob = new Blob([JSON.stringify(history, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `gym_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+function importBackup(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      history = imported; saveHistory(); renderHome();
+      alert("✅ Backup importato con successo!");
+    } catch { alert("❌ File non valido"); }
+  };
+  reader.readAsText(file);
+  e.target.value = "";
+}
+
+// ─── AUDIO ────────────────────────────────────────────────────────────────────
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === "suspended") audioCtx.resume();
+}
+function playBeep(freq, dur, vol = 0.4) {
+  if (!audioCtx) return;
+  const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.frequency.value = freq; osc.type = "sine";
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + dur);
+}
+function playDone() { setTimeout(() => playBeep(880,0.15),0); setTimeout(() => playBeep(1100,0.15),160); setTimeout(() => playBeep(1320,0.3),320); }
+function playTick() { playBeep(440,0.05,0.15); }
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function todayStr() { return new Date().toISOString().slice(0,10); }
+function formatDate(str) { const d = new Date(str+"T12:00:00"); return d.toLocaleDateString("it-IT",{day:"2-digit",month:"short"}); }
+function fmtSec(s) { return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`; }
+function isPaired(name) { return name.includes("[paired]"); }
+function showView(id) { document.querySelectorAll(".view").forEach(v => v.classList.remove("active")); document.getElementById("view-"+id).classList.add("active"); window.scrollTo(0,0); }
+
+// ─── HOME ─────────────────────────────────────────────────────────────────────
+function renderHome() {
+  // Workout list
+  const listEl = document.getElementById("workout-list");
+  listEl.innerHTML = "";
+  CATEGORIES.forEach(cat => {
+    const sec = document.createElement("div"); sec.className = "category-section";
+    sec.innerHTML = `<p class="category-label">${cat.label}</p>`;
+    cat.keys.forEach(wk => {
+      const last = (history[wk]||[])[0];
+      const btn = document.createElement("button");
+      btn.className = "workout-btn";
+      btn.onclick = () => startWorkout(wk);
+      btn.innerHTML = `
+        <div>
+          <div style="display:flex;align-items:center">
+            <span class="workout-dot" style="background:${COLORS[wk]}"></span>
+            <span class="workout-name">${wk}</span>
+          </div>
+          <span class="workout-last">${last ? `Ultima: ${formatDate(last.date)}${last.note?" · 📝":""}` : "Mai eseguita"}</span>
+        </div>
+        <span class="workout-arrow">›</span>`;
+      sec.appendChild(btn);
+    });
+    listEl.appendChild(sec);
+  });
+
+  // Progress tabs
+  const tabsEl = document.getElementById("progress-tabs");
+  tabsEl.innerHTML = "";
+  WORKOUT_KEYS.forEach((wk, i) => {
+    const btn = document.createElement("button");
+    btn.className = "tab-btn" + (i === progressTab ? " active" : "");
+    btn.style.color = i === progressTab ? COLORS[wk] : "#475569";
+    btn.style.borderColor = i === progressTab ? COLORS[wk]+"44" : "#1e1e2e";
+    btn.textContent = wk;
+    btn.onclick = () => { progressTab = i; renderHome(); };
+    tabsEl.appendChild(btn);
+  });
+
+  renderProgress();
+}
+
+function renderProgress() {
+  const wk = WORKOUT_KEYS[progressTab];
+  const sessions = history[wk] || [];
+  const mainEx = WORKOUTS[wk].filter(e => !isPaired(e.name));
+  const color = COLORS[wk];
+  const el = document.getElementById("progress-content");
+
+  if (!sessions.length) { el.innerHTML = `<div class="empty-state">Nessuna sessione registrata</div>`; return; }
+
+  let html = `<div style="display:flex;flex-direction:column;gap:8px">`;
+  mainEx.slice(0,6).forEach(ex => {
+    const pts = sessions.map(s => {
+      const sets = s.data[ex.id]; if (!sets) return null;
+      const valid = sets.filter(s => s.reps);
+      if (!valid.length) return null;
+      const kg = Math.max(...valid.map(s => parseFloat(s.kg)||0)) || null;
+      const reps = Math.max(...valid.map(s => parseFloat(s.reps)||0));
+      return { date: s.date, kg, reps };
+    }).filter(Boolean).reverse();
+    if (!pts.length) return;
+    const latest = pts[pts.length-1];
+    const useReps = !latest.kg;
+    const displayVal = latest.kg ? `${latest.kg} kg` : `${latest.reps} rep`;
+    const vals = useReps ? pts.map(p => p.reps) : pts.map(p => p.kg||0);
+    const maxV = Math.max(...vals);
+    html += `<button class="ex-card" onclick="openChart('${wk.replace(/'/g,"\\'")}','${ex.id}')">
+      <div class="ex-card-row">
+        <span class="ex-card-name">${ex.name.replace(" [paired]","")}</span>
+        <span class="ex-card-val" style="color:${color}">${displayVal}</span>
+      </div>
+      ${sparklineSVG(vals, maxV, color)}
+    </button>`;
+  });
+
+  const notedSessions = sessions.filter(s => s.note).slice(0,3);
+  if (notedSessions.length) {
+    html += `<p style="margin:8px 0 8px;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:2px;font-weight:500">Note recenti</p>`;
+    notedSessions.forEach(s => {
+      html += `<div class="note-card"><span style="font-size:11px;color:#475569;font-family:monospace">${formatDate(s.date)} · </span><span style="font-size:13px;color:#94a3b8">${s.note}</span></div>`;
+    });
+  }
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
+function sparklineSVG(vals, maxV, color) {
+  if (vals.length < 2) return `<div style="height:24px;display:flex;align-items:center"><span style="font-size:11px;color:#334155">1 sessione</span></div>`;
+  const w = 280, h = 28, minV = Math.min(...vals), range = maxV - minV || 1;
+  const pts = vals.map((v,i) => `${(i/(vals.length-1))*w},${h-((v-minV)/range)*(h-4)-2}`).join(" ");
+  const dots = vals.map((v,i) => { const x=(i/(vals.length-1))*w, y=h-((v-minV)/range)*(h-4)-2; return `<circle cx="${x}" cy="${y}" r="2.5" fill="${color}" opacity="0.9"/>`; }).join("");
+  return `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>${dots}</svg>`;
+}
+
+// ─── SESSION ──────────────────────────────────────────────────────────────────
+function startWorkout(wk) {
+  ensureAudio();
+  selectedWorkout = wk;
+  sessionNote = "";
+  activeEx = 0;
+  showNote = false;
+  sessionData = {};
+  WORKOUTS[wk].forEach(ex => { sessionData[ex.id] = Array.from({length:ex.sets}, () => ({kg:"",reps:""})); });
+  renderSession();
+  showView("session");
+}
+
+function renderSession() {
+  const wk = selectedWorkout;
+  const exercises = WORKOUTS[wk];
+  const color = COLORS[wk];
+  const ex = exercises[activeEx];
+  const lastSession = (history[wk]||[])[0];
+
+  document.getElementById("sess-workout-name").textContent = wk;
+  document.getElementById("sess-workout-name").style.color = color;
+  document.getElementById("sess-progress").textContent = `${activeEx+1} / ${exercises.length}`;
+
+  // Note toggle
+  const noteBtn = document.getElementById("note-toggle-btn");
+  noteBtn.style.background = showNote ? "#1e1e2e" : "none";
+  noteBtn.style.border = `1px solid ${showNote ? color+"44" : "#1e1e2e"}`;
+  noteBtn.style.color = showNote ? color : "#475569";
+  document.getElementById("note-area").style.display = showNote ? "block" : "none";
+  document.getElementById("session-note-input").value = sessionNote;
+
+  // Ex tabs
+  const tabsEl = document.getElementById("ex-tabs");
+  tabsEl.innerHTML = "";
+  exercises.forEach((e,i) => {
+    const btn = document.createElement("button");
+    btn.className = "ex-tab" + (i===activeEx?" active":"");
+    btn.style.borderColor = i===activeEx ? color : "#1e1e2e";
+    btn.style.background = i===activeEx ? color+"22" : "#12121a";
+    btn.style.color = i===activeEx ? color : "#475569";
+    btn.textContent = (isPaired(e.name)?"⇢":"") + (i+1);
+    btn.onclick = () => { saveCurrentNote(); activeEx = i; renderSession(); };
+    tabsEl.appendChild(btn);
+  });
+
+  // Body
+  const sets = sessionData[ex.id] || [];
+  const prevSets = lastSession?.data?.[ex.id] || [];
+  let html = "";
+
+  if (isPaired(ex.name)) html += `<span class="paired-badge">PAIRED</span>`;
+  html += `<h2 class="ex-main-title">${ex.name.replace(" [paired]","")}</h2>`;
+  html += `<p class="ex-rep-range" style="color:${color}">${ex.sets} serie × ${ex.repRange} rep</p>`;
+  if (ex.note) html += `<p class="ex-note">${ex.note}</p>`;
+
+  if (prevSets.length && prevSets.some(s => s.kg||s.reps)) {
+    html += `<div class="prev-session"><p class="prev-label">Ultima sessione · ${formatDate(lastSession.date)}</p><div class="prev-sets">`;
+    prevSets.forEach((s,i) => {
+      html += `<span class="prev-set-chip" style="color:${color}cc;background:${color}11">S${i+1}: ${s.kg?s.kg+"kg":"—"} × ${s.reps||"—"}</span>`;
+    });
+    html += `</div></div>`;
+  }
+
+  // Timer
+  if (ex.rest > 0) html += renderTimerHTML(ex.rest, color);
+
+  // Sets
+  html += `<div class="sets-list">`;
+  sets.forEach((s,i) => {
+    const vol = s.kg && s.reps ? Math.round(parseFloat(s.kg)*parseFloat(s.reps)) : "";
+    html += `<div class="set-row">
+      <span class="set-num">S${i+1}</span>
+      <div class="set-inputs">
+        <div class="set-input-wrap">
+          <p class="set-input-label">kg${ex.kgOptional?" (opz.)":""}</p>
+          <input class="set-input" type="number" inputmode="decimal" value="${s.kg}" placeholder="${prevSets[i]?.kg||"—"}" onchange="updateSet('${ex.id}',${i},'kg',this.value)" oninput="updateSet('${ex.id}',${i},'kg',this.value)">
+        </div>
+        <div class="set-input-wrap">
+          <p class="set-input-label">reps</p>
+          <input class="set-input" type="number" inputmode="numeric" value="${s.reps}" placeholder="${prevSets[i]?.reps||"—"}" onchange="updateSet('${ex.id}',${i},'reps',this.value)" oninput="updateSet('${ex.id}',${i},'reps',this.value)">
+        </div>
+      </div>
+      ${vol ? `<span class="set-vol" style="color:${color}">${vol}</span>` : ""}
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Nav
+  html += `<div class="nav-btns">`;
+  if (activeEx > 0) html += `<button class="nav-prev" onclick="saveCurrentNote();activeEx--;renderSession()">← Prec.</button>`;
+  if (activeEx < exercises.length-1) {
+    html += `<button class="nav-next" style="background:${color}22;border:1px solid ${color}44;color:${color}" onclick="saveCurrentNote();activeEx++;renderSession()">Prossimo →</button>`;
+  } else {
+    html += `<button class="nav-next" style="background:${color};color:#0a0a0f" onclick="saveCurrentNote();finishSession()">Salva sessione ✓</button>`;
+  }
+  html += `</div>`;
+
+  document.getElementById("session-body").innerHTML = html;
+  initTimer(ex.rest, color);
+}
+
+function renderTimerHTML(def, color) {
+  return `<div class="timer-block" id="timer-block" style="border-color:#1e1e2e">
+    <div class="timer-svg-wrap">
+      <svg id="timer-svg" width="60" height="60" style="transform:rotate(-90deg)">
+        <circle cx="30" cy="30" r="26" fill="none" stroke="#1e1e2e" stroke-width="3"/>
+        <circle id="timer-arc" cx="30" cy="30" r="26" fill="none" stroke="#334155" stroke-width="3"
+          stroke-dasharray="${2*Math.PI*26} ${2*Math.PI*26}" stroke-linecap="round"/>
+      </svg>
+      <span class="timer-label" id="timer-display" style="color:#475569">${fmtSec(def)}</span>
+    </div>
+    <div class="timer-inner">
+      <p class="timer-title">Timer recupero</p>
+      <div class="timer-controls">
+        <button class="timer-play" id="timer-play-btn" onclick="timerToggle()" style="background:${color}22;border-color:${color}55;color:${color}">▶ Avvia</button>
+        <div class="timer-presets">
+          ${[45,60,90,120,150,180].map(s => `<button class="timer-preset ${timerDuration===s?"sel":""}" onclick="setTimerDuration(${s},'${color}')">${s<60?s+'"':s%60===0?s/60+"'":`${Math.floor(s/60)}'${s%60}"`}</button>`).join("")}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function initTimer(def, color) {
+  timerDuration = def || 90;
+  timerRemaining = null;
+  timerRunning = false;
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  updateTimerUI(color);
+}
+
+function updateTimerUI(color) {
+  const arc = document.getElementById("timer-arc");
+  const disp = document.getElementById("timer-display");
+  const btn = document.getElementById("timer-play-btn");
+  const block = document.getElementById("timer-block");
+  if (!arc) return;
+  const circ = 2*Math.PI*26;
+  const progress = timerRemaining !== null ? timerRemaining/timerDuration : 1;
+  arc.setAttribute("stroke-dasharray", `${circ*progress} ${circ}`);
+  arc.setAttribute("stroke", timerRunning ? (color||"#6366f1") : "#334155");
+  disp.textContent = fmtSec(timerRemaining !== null ? timerRemaining : timerDuration);
+  disp.style.color = timerRemaining !== null ? (color||"#6366f1") : "#475569";
+  if (block) block.style.borderColor = timerRunning ? (color||"#6366f1")+"55" : "#1e1e2e";
+  if (btn) {
+    btn.textContent = timerRunning ? "■ Stop" : "▶ Avvia";
+    btn.style.background = timerRunning ? "#1e1e2e" : (color||"#6366f1")+"22";
+    btn.style.borderColor = timerRunning ? "#2d2d3a" : (color||"#6366f1")+"55";
+    btn.style.color = timerRunning ? "#94a3b8" : (color||"#6366f1");
+  }
+}
+
+function timerToggle() {
+  const color = COLORS[selectedWorkout];
+  if (timerRunning) {
+    clearInterval(timerInterval); timerInterval = null;
+    timerRunning = false; timerRemaining = null;
+  } else {
+    timerRemaining = timerDuration; timerRunning = true;
+    let left = timerDuration;
+    timerInterval = setInterval(() => {
+      left--; timerRemaining = left;
+      if (left <= 3 && left > 0) playTick();
+      if (left <= 0) {
+        clearInterval(timerInterval); timerInterval = null;
+        timerRunning = false; timerRemaining = 0;
+        playDone();
+        if (navigator.vibrate) navigator.vibrate([200,100,200,100,400]);
+      }
+      updateTimerUI(color);
+    }, 1000);
+  }
+  updateTimerUI(color);
+}
+
+function setTimerDuration(s, color) {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  timerDuration = s; timerRemaining = null; timerRunning = false;
+  document.querySelectorAll(".timer-preset").forEach(b => { b.classList.toggle("sel", parseInt(b.textContent)*60===s||b.textContent===s+'"'||b.onclick.toString().includes(`(${s},`)); });
+  document.querySelectorAll(".timer-preset").forEach(b => {
+    const match = b.getAttribute("onclick")?.includes(`(${s},`);
+    b.classList.toggle("sel", !!match);
+    if (match) { b.style.background="#1e1e2e"; b.style.color=color||"#6366f1"; b.style.borderColor=(color||"#6366f1")+"44"; }
+    else { b.style.background="transparent"; b.style.color="#334155"; b.style.borderColor="#1e1e2e"; }
+  });
+  updateTimerUI(color);
+}
+
+function updateSet(exId, idx, field, val) {
+  if (!sessionData[exId]) return;
+  sessionData[exId][idx][field] = val;
+  const color = COLORS[selectedWorkout];
+  // Update volume display inline without full re-render
+  const setRows = document.querySelectorAll(".set-row");
+  const row = setRows[idx];
+  if (row) {
+    const s = sessionData[exId][idx];
+    const vol = s.kg && s.reps ? Math.round(parseFloat(s.kg)*parseFloat(s.reps)) : "";
+    let volEl = row.querySelector(".set-vol");
+    if (vol) {
+      if (!volEl) { volEl = document.createElement("span"); volEl.className="set-vol"; volEl.style.color=color; row.appendChild(volEl); }
+      volEl.textContent = vol;
+    } else if (volEl) volEl.textContent = "";
+  }
+}
+
+function saveCurrentNote() {
+  const inp = document.getElementById("session-note-input");
+  if (inp) sessionNote = inp.value;
+}
+
+function toggleNote() {
+  saveCurrentNote();
+  showNote = !showNote;
+  renderSession();
+}
+
+function finishSession() {
+  const entry = { date: todayStr(), workout: selectedWorkout, data: sessionData, note: sessionNote };
+  if (!history[selectedWorkout]) history[selectedWorkout] = [];
+  history[selectedWorkout] = [entry, ...history[selectedWorkout]].slice(0,50);
+  saveHistory();
+  goHome();
+}
+
+// ─── CHART ────────────────────────────────────────────────────────────────────
+function openChart(wk, exId) {
+  chartWorkout = wk; chartExId = exId;
+  const ex = WORKOUTS[wk].find(e => e.id === exId);
+  const color = COLORS[wk];
+  document.getElementById("chart-workout-label").textContent = wk;
+  document.getElementById("chart-workout-label").style.color = color;
+  document.getElementById("chart-ex-name").textContent = ex.name.replace(" [paired]","");
+
+  const sessions = history[wk] || [];
+  const points = sessions.map(s => {
+    const sets = s.data[exId]; if (!sets) return null;
+    const valid = sets.filter(s => s.reps); if (!valid.length) return null;
+    const maxKg = Math.max(...valid.map(s => parseFloat(s.kg)||0)) || null;
+    const maxReps = Math.max(...valid.map(s => parseFloat(s.reps)||0));
+    const vol = Math.round(valid.reduce((a,s) => a+(parseFloat(s.kg)||0)*(parseFloat(s.reps)||0),0));
+    return { date: s.date, kg: maxKg, reps: maxReps, vol };
+  }).filter(Boolean).reverse();
+
+  const chartBody = document.getElementById("chart-body");
+  if (!points.length) { chartBody.innerHTML = `<div class="empty-state" style="padding:60px 0">Nessun dato ancora</div>`; showView("chart"); return; }
+
+  const latest = points[points.length-1];
+  const useReps = !latest.kg;
+  const vals = useReps ? points.map(p => p.reps) : points.map(p => p.kg||0);
+  const hasChart = points.length >= 2;
+
+  let html = `<div class="stat-grid">
+    <div class="stat-card">
+      <p class="stat-card-label">${useReps?"Reps max":"Carico max"}</p>
+      <p class="stat-card-val" style="color:${color}">${useReps?latest.reps:latest.kg}<span class="stat-card-unit"> ${useReps?"rep":"kg"}</span></p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-card-label">Sessioni</p>
+      <p class="stat-card-val" style="color:#94a3b8">${points.length}</p>
+    </div>
+  </div>`;
+
+  if (hasChart) {
+    const w=300, h=120, px=10, py=10, iW=w-px*2, iH=h-py*2;
+    const minV=Math.min(...vals), maxV=Math.max(...vals), range=maxV-minV||1;
+    const coords = points.map((p,i) => ({ x: px+(i/(points.length-1))*iW, y: py+iH-((vals[i]-minV)/range)*iH, val:vals[i], date:p.date }));
+    const pathD = coords.map((c,i) => `${i===0?"M":"L"} ${c.x} ${c.y}`).join(" ");
+    const areaD = pathD+` L ${coords[coords.length-1].x} ${h} L ${coords[0].x} ${h} Z`;
+    html += `<div class="chart-card">
+      <p class="chart-card-label">Progressione ${useReps?"reps":"carico"}</p>
+      <svg width="100%" viewBox="0 0 ${w} ${h+16}" style="overflow:visible">
+        <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+        </linearGradient></defs>
+        <path d="${areaD}" fill="url(#ag)"/>
+        <path d="${pathD}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        ${coords.map((c,i) => `<g><circle cx="${c.x}" cy="${c.y}" r="4" fill="${color}"/><text x="${c.x}" y="${c.y-8}" text-anchor="middle" font-size="9" fill="${color}" font-family="monospace">${c.val}</text><text x="${c.x}" y="${h+12}" text-anchor="middle" font-size="8" fill="#475569">${formatDate(c.date)}</text></g>`).join("")}
+      </svg>
+    </div>`;
+  }
+
+  html += `<div class="history-table">
+    <div class="history-table-header"><span>Data</span><span style="text-align:center">${useReps?"Reps":"Kg"}</span><span style="text-align:right">Volume</span></div>
+    ${points.slice().reverse().map(p => `<div class="history-row">
+      <span style="color:#94a3b8;font-family:monospace">${formatDate(p.date)}</span>
+      <span style="text-align:center;color:${color};font-family:monospace;font-weight:500">${useReps?p.reps:p.kg}</span>
+      <span style="text-align:right;color:#475569;font-family:monospace">${p.vol||"—"}</span>
+    </div>`).join("")}
+  </div>`;
+
+  chartBody.innerHTML = html;
+  showView("chart");
+}
+
+function goHome() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  timerRunning = false; timerRemaining = null;
+  renderHome();
+  showView("home");
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadHistory();
+renderHome();
+</script>
+</body>
+</html>
