@@ -281,6 +281,31 @@ function loadHistory() {
 function saveHistory() {
   try { localStorage.setItem("workout_history_v2", JSON.stringify(history)); } catch {}
 }
+function saveSessionDraft() {
+  if (!selectedWorkout) return;
+  try {
+    localStorage.setItem("workout_draft", JSON.stringify({
+      workout: selectedWorkout,
+      sessionData,
+      sessionNote,
+      activeEx,
+      ts: Date.now()
+    }));
+  } catch {}
+}
+function clearSessionDraft() {
+  try { localStorage.removeItem("workout_draft"); } catch {}
+}
+function loadSessionDraft() {
+  try {
+    const r = localStorage.getItem("workout_draft");
+    if (!r) return false;
+    const d = JSON.parse(r);
+    // Ignora draft più vecchi di 24 ore
+    if (Date.now() - d.ts > 86400000) { clearSessionDraft(); return false; }
+    return d;
+  } catch { return false; }
+}
 function exportBackup() {
   const blob = new Blob([JSON.stringify(history, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
@@ -431,6 +456,7 @@ function startWorkout(wk) {
   showNote = false;
   sessionData = {};
   WORKOUTS[wk].forEach(ex => { sessionData[ex.id] = Array.from({length:ex.sets}, () => ({kg:"",reps:""})); });
+  saveSessionDraft();
   renderSession();
   showView("session");
 }
@@ -614,6 +640,7 @@ function setTimerDuration(s, color) {
 function updateSet(exId, idx, field, val) {
   if (!sessionData[exId]) return;
   sessionData[exId][idx][field] = val;
+  saveSessionDraft();
   const color = COLORS[selectedWorkout];
   // Update volume display inline without full re-render
   const setRows = document.querySelectorAll(".set-row");
@@ -632,6 +659,7 @@ function updateSet(exId, idx, field, val) {
 function saveCurrentNote() {
   const inp = document.getElementById("session-note-input");
   if (inp) sessionNote = inp.value;
+  saveSessionDraft();
 }
 
 function toggleNote() {
@@ -645,6 +673,7 @@ function finishSession() {
   if (!history[selectedWorkout]) history[selectedWorkout] = [];
   history[selectedWorkout] = [entry, ...history[selectedWorkout]].slice(0,50);
   saveHistory();
+  clearSessionDraft();
   goHome();
 }
 
@@ -728,7 +757,20 @@ function goHome() {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 loadHistory();
-renderHome();
+
+// Ripristina sessione in corso se Safari ha ricaricato
+const draft = loadSessionDraft();
+if (draft && WORKOUTS[draft.workout]) {
+  selectedWorkout = draft.workout;
+  sessionData = draft.sessionData;
+  sessionNote = draft.sessionNote || "";
+  activeEx = draft.activeEx || 0;
+  showNote = false;
+  renderSession();
+  showView("session");
+} else {
+  renderHome();
+}
 </script>
 </body>
 </html>
