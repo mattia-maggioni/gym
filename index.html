@@ -122,29 +122,33 @@
   .rest{font-family:var(--mono);font-size:11px;color:var(--dim);padding-top:4px;
     white-space:nowrap}
 
-  .ctrl{grid-column:2/4;display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;margin-top:9px}
-  .ticks{display:flex;gap:4px;padding-bottom:1px}
+  .ctrl{grid-column:2/4;margin-top:10px}
+  .sets{display:flex;flex-direction:column;gap:5px;max-width:330px}
+  .setrow{display:grid;grid-template-columns:20px 1fr 1fr 34px;gap:6px;align-items:center}
+  .setrow .no{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:center}
+  .setrow.head .no,.setrow.head label{font-family:var(--mono);font-size:8.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--dim);text-align:center}
+  .setrow.head label{display:block}
+  .setrow.head{margin-bottom:-1px}
+  input.load{
+    width:100%;background:var(--panel);border:1px solid var(--line);border-radius:2px;
+    color:var(--text);font-family:var(--mono);font-size:16px;padding:6px 7px;text-align:center;
+    touch-action:manipulation;
+  }
+  input.load::placeholder{color:var(--dim)}
+  input.load:focus{outline:none;border-color:var(--orange)}
   .tick{
-    width:26px;height:26px;border:1px solid var(--line);background:transparent;
+    width:34px;height:32px;border:1px solid var(--line);background:transparent;
     border-radius:2px;cursor:pointer;position:relative;padding:0;
   }
-  .tick::after{content:"";position:absolute;inset:5px;background:transparent;border-radius:1px}
+  .tick::after{content:"";position:absolute;inset:7px;background:transparent;border-radius:1px}
   .tick[aria-pressed="true"]{border-color:var(--orange)}
   .tick[aria-pressed="true"]::after{background:var(--orange)}
   .tick:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
-  input.load{
-    width:78px;background:var(--panel);border:1px solid var(--line);border-radius:2px;
-    color:var(--text);font-family:var(--mono);font-size:16px;padding:7px 8px;
-    touch-action:manipulation;
-  }
-  .field{display:flex;flex-direction:column;gap:3px}
-  .field label{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--dim);padding-left:1px}
-  input.load::placeholder{color:var(--dim)}
-  input.load:focus{outline:none;border-color:var(--orange)}
   .prev{
     background:none;border:1px dashed var(--line);border-radius:2px;cursor:pointer;
-    padding:5px 9px;text-align:left;color:var(--muted);font-family:var(--mono);font-size:11.5px;
+    padding:6px 9px;text-align:left;color:var(--muted);font-family:var(--mono);font-size:11px;
+    margin-top:7px;max-width:330px;width:100%;line-height:1.4;
   }
   .prev span{display:block;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;
     color:var(--dim);margin-bottom:2px}
@@ -160,12 +164,23 @@
   #closebtn:disabled{cursor:default;opacity:.5}
   .closehint{font-size:12px;color:var(--dim);margin-top:9px;line-height:1.45}
 
+  .dbtns{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .dbtn{
+    background:var(--panel-2);border:1px solid var(--line);border-radius:2px;color:var(--text);
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:9px 13px;cursor:pointer;display:inline-block;
+  }
+  .dbtn:hover{border-color:var(--orange);color:var(--orange)}
+  .dbtn.go{background:var(--orange);border-color:var(--orange);color:#170A03}
+  .impmsg{font-family:var(--mono);font-size:11.5px;margin-top:8px;min-height:16px}
+  .impmsg.ok{color:var(--moss)}
+  .impmsg.err{color:var(--red)}
+
   .track{border-bottom:1px solid var(--line);padding:13px 0}
   .track b{font-weight:600;font-size:14.5px;display:block;margin-bottom:8px}
-  .spark{display:flex;gap:5px;flex-wrap:wrap}
-  .spark i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);
-    background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:4px 7px;
-    white-space:nowrap}
+  .spark{display:flex;flex-direction:column;gap:4px}
+  .spark i{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:2px;padding:5px 8px}
   .spark i:last-child{border-color:var(--orange);color:var(--text)}
   .spark i u{text-decoration:none;color:var(--dim);font-size:8.5px;letter-spacing:.1em;
     text-transform:uppercase;margin-right:5px}
@@ -263,7 +278,9 @@
   @media (max-width:480px){
     h1{font-size:24px}
     .wordmark{font-size:19px;letter-spacing:.09em}
-    input.load{width:66px}
+    .sets{max-width:none}
+    .setrow{grid-template-columns:18px 1fr 1fr 32px;gap:5px}
+    .prev{max-width:none}
     .tick{width:24px;height:24px}
   }
 </style>
@@ -350,8 +367,10 @@ function lowerA(w){
   const sq=squatFor(w), cp=copenFor(w), ov=overFor(w), su=stepUpFor(w);
   const list=[
     {n:"Neck work (flex/est)",p:"2–3×15–25",r:"45–60\"",warm:true},
-    {n:"Spanish squat isometrico",p:"2×30\"",r:"60\"",warm:true,
-      h:"Riscaldamento e termometro: se il ginocchio protesta qui, oggi tieni i carichi fermi."},
+    {n:"Attivazione anca (thigh master)",p:"2×15 adduzione + 2×15 abduzione",r:"30\"",warm:true,
+      h:"Prima del lavoro serio. Non costruisce forza ma sblocca l'ingresso nel Copenhagen: due serie e il bacino smette di cedere."},
+    {n:"Wall sit",p:"2×30–45\"",r:"60\"",warm:true,
+      h:"Riscaldamento e termometro: se il ginocchio protesta qui, oggi tieni i carichi fermi. Ginocchia a 90°, tibie verticali, schiena piatta al muro."},
     {n:"Step-over sul bilanciere",p:ov.p,r:"45\"",h:ov.h},
     {n:sq.n,p:sq.p,r:sq.r,h:sq.h},
     {n:"RDL manubri",p:"3×10–12",r:"2'",
@@ -363,6 +382,12 @@ function lowerA(w){
       h:"Gamba distesa a ginocchio teso e rotula in su: è così che carichi l'adduttore lungo invece di aggirarlo."},
     {n:"Copenhagen",p:cp.p,r:"60\"",h:cp.h},
     {n:"Calf raise su rialzo",p:"3×12–15",r:"90\""},
+    {n:"Leg raise supino",p:"3×10–15 · lento",r:"60\"",
+      h:"Gambe unite, su e giù su tutto il range. Flessori d'anca sotto carico più anti-estensione del core. Lombare schiacciata a terra: se si stacca, piega le ginocchia. Non far toccare i talloni tra una ripetizione e l'altra."},
+    {n:"Flutter kick",p:"3×20–30\"",r:"45\"",
+      h:"Gambe alternate a forbice, mai a terra. Mani sotto i glutei. Se la lombare si inarca la serie è finita: tieni le gambe più alte (45°) finché il core non regge — più sono basse, più è dura."},
+    {n:"Dead bug",p:"2×10/lato · lento",r:"45\"",
+      h:"Lombare schiacciata a terra per tutta la serie. È l'anti-rotazione del bacino: il pezzo che ti cedeva all'ingresso del Copenhagen."},
     {n:"Crunch + reverse crunch",p:"3×12–15",r:"60\""}
   ];
   if(w>=7) list.splice(7,0,{n:"Bulgarian split squat",p:w>=9?"3×8–10/lato · caricato":"3×8/lato · corpo libero",r:"90\"",
@@ -373,7 +398,9 @@ function lowerB(w){
   const ov=overFor(w);
   const list=[
     {n:"Neck work (flex/est)",p:"2–3×15–25",r:"45–60\"",warm:true},
-    {n:"Spanish squat isometrico",p:"3×30–45\"",r:"60\"",warm:true},
+    {n:"Attivazione anca (thigh master)",p:"2×15 adduzione + 2×15 abduzione",r:"30\"",warm:true},
+    {n:"Wall sit caricato",p:"3×30–45\" · disco 10–20 kg",r:"60\"",warm:true,
+      h:"Disco o manubrio sulle cosce. Progressione: corpo libero → carico → piedi più avanti → monopodalico 3×20–30\" a 60–70°."},
     {n:"RDL bilanciere",p:"3×8–10",r:"2'",
       h:"Dopo i DOMS di agosto riparti col 20–30% in meno e chiudi a RIR 4. Filma di lato la prima seduta."},
     {n:"Leg curl TRX / Nordic assistito",p:"3×8–10",r:"90\"",
@@ -383,8 +410,13 @@ function lowerB(w){
     {n:"Split stance isometrico elevato",p:"3×30–45\"/lato",r:"60\"",
       h:"Piede su rialzo 35–45 cm, l'altro a terra di lato. Spingi attivamente contro il rialzo: è la posizione del pivot turn."},
     {n:"Step-over sul bilanciere",p:ov.p,r:"45\"",h:ov.h},
-    {n:"Monster walk / band walk laterale",p:"3×12 passi per direzione",r:"45\""},
-    {n:"Side plank con abduzione",p:"3×10–12/lato",r:"45\"",h:"Medio gluteo. È anche il tuo test: sotto i 45\" c'è margine."},
+    {n:"Clamshell con elastico",p:"3×12–15/lato",r:"45\"",
+      h:"Gluteo medio senza compressione trocanterica. Cuscino tra le ginocchia se punge. Bacino fermo, non ruotare all'indietro."},
+    {n:"Monster walk / band walk laterale",p:"2×12 passi per direzione",r:"45\""},
+    {n:"Side plank con abduzione",p:"3×10–12/lato",r:"45\"",
+      h:"Gamba leggermente indietro rispetto alla linea del corpo, non oltre i 30–40° di alzata, rotula neutra. Se punge, riduci il range."},
+    {n:"Pallof press con elastico",p:"2×10/lato",r:"45\"",
+      h:"Anti-rotazione. Elastico all'altezza del petto, spingi avanti resistendo alla torsione. Costruisce la zona che ha ceduto nel Copenhagen."},
     {n:"Calf raise una gamba",p:"3×10–15",r:"90\""},
     {n:"Plank zavorrata",p:"3×30–45\"",r:"60\""},
     {n:"Jefferson curl",p:"2×6 · manubrio 4–6 kg",r:"60\"",
@@ -453,6 +485,24 @@ function entry(id){
   if(S.log[k].week===undefined) S.log[k].week=S.week;
   return S.log[k];
 }
+/* carichi per serie: [{kg,rep},…] — migra dai formati precedenti */
+function normLoad(ld,n){
+  let out=[];
+  if(Array.isArray(ld)) out=ld.slice();
+  else if(ld&&typeof ld==="object") out=[{kg:ld.kg||"",rep:ld.rep||""}];
+  else if(typeof ld==="string"&&ld) out=[{kg:ld,rep:""}];
+  while(out.length<n) out.push({kg:"",rep:""});
+  for(let i=0;i<out.length;i++) if(!out[i]||typeof out[i]!=="object") out[i]={kg:"",rep:""};
+  return out;
+}
+function loadSummary(ld){
+  return ld.filter(function(s){return (s.kg||"").trim()||(s.rep||"").trim()})
+    .map(function(s){
+      const k=(s.kg||"").trim(), r=(s.rep||"").trim();
+      return k&&r ? (k+"×"+r) : (k?k+" kg":r+" rip");
+    }).join(" · ");
+}
+
 /* storico carichi per nome esercizio — sopravvive ai cambi di scheda */
 function pushHist(name,val){
   if(!S.hist) S.hist={};
@@ -474,28 +524,56 @@ function lastHist(name){
 }
 
 async function load(){
-  try{const r=await window.storage.get(KEY); if(r&&r.value) S=Object.assign(S,JSON.parse(r.value));}
-  catch(e){/* prima apertura */}
+  let host=null, local=null;
+  try{ const r=await window.storage.get(KEY); if(r&&r.value) host=JSON.parse(r.value); }
+  catch(e){ hostOK=false; }
+  try{ const b=backupRead(); if(b) local=JSON.parse(b); }catch(e){}
+  /* uso la copia con più dati registrati: evita di perdere una seduta */
+  const score=function(o){ return o?(Object.keys(o.log||{}).length*100+Object.keys(o.hist||{}).length):-1 };
+  const best=score(local)>score(host)?local:host;
+  if(best) S=Object.assign(S,best);
   if(!S.started) S.started=todayISO();
+  if(!S.hist) S.hist={};
 }
-let dirty=false, saving=false, lastSaved=null;
+let dirty=false, saving=false, lastSaved=null, hostOK=true;
+
+/* riserva locale: serve quando l'app è aperta fuori dall'app Claude (es. scorciatoia in home) */
+function backupWrite(str){
+  try{ if(window.localStorage) window.localStorage.setItem(KEY,str); }catch(e){}
+}
+function backupRead(){
+  try{ return window.localStorage ? window.localStorage.getItem(KEY) : null; }catch(e){ return null; }
+}
 
 function markSaved(ok){
   lastSaved=ok?new Date():lastSaved;
   const el=document.getElementById("savestate");
-  if(el) el.textContent=ok?("Salvato "+new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"})):"Salvataggio non riuscito";
-  if(el) el.style.color=ok?"var(--dim)":"var(--red)";
+  if(!el) return;
+  if(ok){
+    el.textContent=(hostOK?"Salvato ":"Salvato in locale ")+new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+    el.style.color="var(--dim)";
+  }else{
+    el.textContent="Salvataggio non riuscito";
+    el.style.color="var(--red)";
+  }
 }
 async function flush(){
   if(saving||!dirty) return;
   saving=true;
   const snapshot=JSON.stringify(S);
-  try{ await window.storage.set(KEY,snapshot); dirty=false; markSaved(true); }
-  catch(e){ console.error("Salvataggio non riuscito",e); markSaved(false); }
-  finally{ saving=false; if(dirty) flush(); }
+  backupWrite(snapshot);           /* scrittura immediata e sincrona */
+  let ok=true;
+  try{
+    if(window.storage&&window.storage.set) await window.storage.set(KEY,snapshot);
+    else hostOK=false;
+  }catch(e){ hostOK=false; }
+  dirty=false; markSaved(ok);
+  saving=false;
+  if(dirty) flush();
 }
 function save(){
   dirty=true;
+  backupWrite(JSON.stringify(S));  /* mai perdere niente, nemmeno con un refresh immediato */
   clearTimeout(saveTimer);
   saveTimer=setTimeout(flush,120);
 }
@@ -571,8 +649,7 @@ function viewAllen(){
     h+='<div class="block warn"><h4>Settimane 1–2 · calibrazione</h4>'+
        '<p>Chiudi tutte le serie a RIR 4–5. Devi finire con la sensazione di aver fatto poco: è corretto così. '+
        'Dopo mesi di stop il sistema nervoso ti farà sembrare fattibile molto più di quello che i tendini tollerano.</p></div>';
-  }
-  if(D.id==="loA"&&S.week>=3&&S.week<=8){
+  }  if(D.id==="loA"&&S.week>=3&&S.week<=8){
     h+='<div class="block"><h4>Un solo parametro alla volta</h4>'+
        '<p>Questa settimana cambi solo ciò che è scritto sullo squat. Tutto il resto resta com\'era: '+
        'è l\'errore che ti ha fermato a giugno.</p></div>';
@@ -582,21 +659,23 @@ function viewAllen(){
   ex.forEach(function(x,i){
     const n=setsOf(x.p), a=e.sets[i]||[];
     let c=0;for(let j=0;j<n;j++) if(a[j]) c++;
+    const ld=normLoad(e.load[i],n);
     h+='<div class="row'+(c===n?" done":"")+(x.warm?" warm":"")+'">'+
        '<div class="idx">'+(x.warm?"○":String(i+1).padStart(2,"0"))+'</div>'+
        '<div class="name"><b>'+esc(x.n)+'</b><div class="presc">'+esc(x.p)+'</div>'+
        (x.h?'<div class="hint">'+esc(x.h)+'</div>':'')+'</div>'+
        '<div class="rest">'+esc(x.r||"")+'</div>'+
-       '<div class="ctrl"><div class="ticks">';
-    for(let j=0;j<n;j++) h+='<button class="tick" data-ex="'+i+'" data-set="'+j+'" aria-pressed="'+(!!a[j])+'" aria-label="Serie '+(j+1)+'"></button>';
-    const ld=e.load[i];
-    const kg=(ld&&typeof ld==="object")?(ld.kg||""):(ld||"");
-    const rp=(ld&&typeof ld==="object")?(ld.rep||""):"";
-    h+='</div>'+
-       '<div class="field"><label>kg</label><input class="load" inputmode="decimal" data-ex="'+i+'" data-f="kg" data-name="'+esc(x.n)+'" placeholder="—" value="'+esc(kg)+'"></div>'+
-       '<div class="field"><label>rip</label><input class="load" inputmode="numeric" data-ex="'+i+'" data-f="rep" data-name="'+esc(x.n)+'" placeholder="—" value="'+esc(rp)+'"></div>';
+       '<div class="ctrl"><div class="sets">'+
+       '<div class="setrow head"><div class="no">#</div><label>kg</label><label>rip</label><div></div></div>';
+    for(let j=0;j<n;j++){
+      h+='<div class="setrow"><div class="no">'+(j+1)+'</div>'+
+         '<input class="load" inputmode="decimal" data-ex="'+i+'" data-set="'+j+'" data-f="kg" data-name="'+esc(x.n)+'" placeholder="—" value="'+esc(ld[j].kg)+'">'+
+         '<input class="load" inputmode="numeric" data-ex="'+i+'" data-set="'+j+'" data-f="rep" data-name="'+esc(x.n)+'" placeholder="—" value="'+esc(ld[j].rep)+'">'+
+         '<button class="tick" data-ex="'+i+'" data-set="'+j+'" aria-pressed="'+(!!a[j])+'" aria-label="Serie '+(j+1)+' fatta"></button></div>';
+    }
+    h+='</div>';
     const lh=lastHist(x.n);
-    if(lh) h+='<button class="prev" data-ex="'+i+'" data-v="'+esc(lh.v)+'" title="Tocca per ricopiare">'+
+    if(lh) h+='<button class="prev" data-ex="'+i+'" data-v="'+esc(lh.v)+'" data-name="'+esc(x.n)+'" title="Tocca per ricopiare">'+
       '<span>ultima · sett '+lh.w+'</span>'+esc(lh.v)+'</button>';
     h+='</div></div>';
   });
@@ -669,7 +748,7 @@ function viewProg(){
      'non è stallo: è il ritmo previsto.</p></div>';
   names.sort();
   names.forEach(function(n){
-    const l=H[n].slice(-8);
+    const l=H[n].slice(-6);
     h+='<div class="track"><b>'+esc(n)+'</b><div class="spark">';
     l.forEach(function(r){h+='<i><u>s'+r.w+'</u>'+esc(r.v)+'</i>'});
     h+='</div></div>';
@@ -784,6 +863,22 @@ function viewGuide(){
      '<tr><td>8–12 settimane</td><td>Squat a profondità piena con carico</td></tr>'+
      '<tr><td>12+ settimane</td><td>Apertura adduttori — è tessuto tendineo, si adatta in mesi</td></tr>'+
      '</table></div></details>';
+  h+='<details><summary>Backup dei dati</summary><div class="body">'+
+     '<p>Prima di sostituire l\'app con una versione aggiornata, esporta. Poi riapri questa sezione '+
+     'nella nuova versione e reimporta.</p>'+
+     '<h5>Esporta</h5>'+
+     '<div class="dbtns"><button class="dbtn" id="expfile">Scarica file</button>'+
+     '<button class="dbtn" id="expcopy">Copia negli appunti</button></div>'+
+     '<textarea class="note" id="expbox" readonly style="min-height:70px;font-family:var(--mono);font-size:11px"></textarea>'+
+     '<h5>Importa</h5>'+
+     '<div class="dbtns"><label class="dbtn" for="impfile">Scegli file…</label>'+
+     '<input type="file" id="impfile" accept=".json,application/json" style="display:none"></div>'+
+     '<textarea class="note" id="impbox" placeholder="…oppure incolla qui il backup e tocca Carica"></textarea>'+
+     '<div class="dbtns"><button class="dbtn go" id="impgo">Carica backup</button></div>'+
+     '<div id="impmsg" class="impmsg"></div>'+
+     '<p style="margin-top:12px;color:var(--muted)">I dati sono legati all\'indirizzo da cui apri l\'app. '+
+     'Se cambi dominio o passi dall\'app Claude al sito, esporta prima.</p>'+
+     '</div></details>';
   return h;
 }
 
@@ -844,12 +939,12 @@ function wire(){
   });
   document.querySelectorAll('input.load').forEach(function(inp){
     const commit=function(){
-      const D=DAYS.find(function(x){return x.id===day}), e=entry(D.id), i=+inp.dataset.ex;
-      let ld=e.load[i];
-      if(!ld||typeof ld!=="object") ld=e.load[i]={kg:(typeof ld==="string"?ld:""),rep:""};
-      ld[inp.dataset.f]=inp.value;
-      const kg=(ld.kg||"").trim(), rp=(ld.rep||"").trim();
-      pushHist(inp.dataset.name, kg&&rp ? (kg+" kg × "+rp) : (kg?kg+" kg":(rp?rp+" rip":"")));
+      const D=DAYS.find(function(x){return x.id===day}), e=entry(D.id),
+            i=+inp.dataset.ex, j=+inp.dataset.set, n=setsOf(D.get(S.week)[i].p);
+      const ld=normLoad(e.load[i],n);
+      ld[j][inp.dataset.f]=inp.value;
+      e.load[i]=ld;
+      pushHist(inp.dataset.name, loadSummary(ld));
       save();
     };
     inp.oninput=commit;
@@ -857,16 +952,23 @@ function wire(){
   });
   document.querySelectorAll('.prev').forEach(function(b){
     b.onclick=function(){
-      const D=DAYS.find(function(x){return x.id===day}), i=+b.dataset.ex, e=entry(D.id);
-      const m=String(b.dataset.v).match(/^([\d.,]+)\s*kg(?:\s*×\s*(\d+))?/);
-      const kg=m?m[1]:"", rp=m&&m[2]?m[2]:"";
-      e.load[i]={kg:kg,rep:rp};
-      const ik=document.querySelector('input.load[data-ex="'+i+'"][data-f="kg"]');
-      const ir=document.querySelector('input.load[data-ex="'+i+'"][data-f="rep"]');
-      if(ik) ik.value=kg;
-      if(ir) ir.value=rp;
-      const nm=ik?ik.dataset.name:null;
-      if(nm) pushHist(nm, kg&&rp?(kg+" kg × "+rp):(kg?kg+" kg":""));
+      const D=DAYS.find(function(x){return x.id===day}), i=+b.dataset.ex, e=entry(D.id),
+            n=setsOf(D.get(S.week)[i].p);
+      const parts=String(b.dataset.v).split("·").map(function(s){return s.trim()}).filter(Boolean);
+      const ld=normLoad(null,n);
+      parts.forEach(function(p,k){
+        if(k>=n) return;
+        const m=p.match(/^([\d.,]+)\s*(?:×\s*(\d+))?/);
+        if(m){ ld[k].kg=m[1]||""; ld[k].rep=m[2]||""; }
+      });
+      /* se l'ultima volta aveva meno serie, replica l'ultima sulle rimanenti */
+      const lastFilled=parts.length?ld[Math.min(parts.length,n)-1]:null;
+      if(lastFilled) for(let k=parts.length;k<n;k++){ ld[k].kg=lastFilled.kg; ld[k].rep=lastFilled.rep; }
+      e.load[i]=ld;
+      document.querySelectorAll('input.load[data-ex="'+i+'"]').forEach(function(inp){
+        inp.value=ld[+inp.dataset.set][inp.dataset.f]||"";
+      });
+      pushHist(b.dataset.name, loadSummary(ld));
       save();
     };
   });
@@ -898,10 +1000,74 @@ function wire(){
     await flush();
     render();
   };
+  /* --- backup --- */
+  const expbox=document.getElementById("expbox");
+  if(expbox) expbox.value=JSON.stringify(S);
+  const stamp=function(){
+    const d=new Date();
+    return d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
+  };
+  const ef=document.getElementById("expfile");
+  if(ef) ef.onclick=function(){
+    const blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url; a.download="workout-plan-"+stamp()+".json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){URL.revokeObjectURL(url)},1000);
+  };
+  const ec=document.getElementById("expcopy");
+  if(ec) ec.onclick=async function(){
+    const txt=JSON.stringify(S);
+    try{ await navigator.clipboard.writeText(txt); ec.textContent="Copiato ✓"; }
+    catch(err){
+      if(expbox){ expbox.focus(); expbox.select(); }
+      ec.textContent="Seleziona e copia";
+    }
+    setTimeout(function(){ec.textContent="Copia negli appunti"},2200);
+  };
+  const impmsg=document.getElementById("impmsg");
+  const applyImport=function(txt){
+    let data;
+    try{ data=JSON.parse(txt); }
+    catch(err){ if(impmsg){impmsg.className="impmsg err";impmsg.textContent="File non leggibile."} return; }
+    if(!data||typeof data!=="object"||(!data.log&&!data.hist&&data.week===undefined)){
+      if(impmsg){impmsg.className="impmsg err";impmsg.textContent="Non sembra un backup di questa app."}
+      return;
+    }
+    const n=Object.keys(data.log||{}).length;
+    if(!confirm("Sostituisco i dati attuali con il backup ("+n+" sedute). Non si può annullare.")) return;
+    S={week:data.week||1,log:data.log||{},daily:data.daily||{},hist:data.hist||{},started:data.started||todayISO()};
+    dirty=true; clearTimeout(saveTimer);
+    flush().then(function(){
+      if(impmsg){impmsg.className="impmsg ok";impmsg.textContent="Caricato: "+n+" sedute."}
+      setTimeout(render,900);
+    });
+  };
+  const impf=document.getElementById("impfile");
+  if(impf) impf.onchange=function(){
+    const f=impf.files&&impf.files[0];
+    if(!f) return;
+    const rd=new FileReader();
+    rd.onload=function(){applyImport(String(rd.result))};
+    rd.onerror=function(){ if(impmsg){impmsg.className="impmsg err";impmsg.textContent="Lettura del file non riuscita."} };
+    rd.readAsText(f);
+  };
+  const impgo=document.getElementById("impgo");
+  if(impgo) impgo.onclick=function(){
+    const box=document.getElementById("impbox");
+    if(!box||!box.value.trim()){
+      if(impmsg){impmsg.className="impmsg err";impmsg.textContent="Incolla prima il backup, o scegli un file."}
+      return;
+    }
+    applyImport(box.value.trim());
+  };
+
   const rs=document.getElementById("reset");
   if(rs) rs.onclick=async function(){
     if(!confirm("Azzera settimana, serie, carichi e diario. Non si può annullare.")) return;
     S={week:1,log:{},daily:{},hist:{},started:todayISO()};
+    backupWrite(JSON.stringify(S));
     try{await window.storage.set(KEY,JSON.stringify(S));}catch(e){}
     render();
   };
