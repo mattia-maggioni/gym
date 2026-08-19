@@ -426,26 +426,24 @@ function lowerB(w){
     h:"Rientra alla settimana 8, dopo che squat e RDL hanno retto. Non nella stessa seduta dello squat pesante."});
   return list;
 }
-function mobility(w){
+function mobility(w,walk){
   const l=[
     {n:"Supine straddle leg opens",p:"3×8/lato · gamba tesa",r:"—",
-      h:"Abduzione attiva ad anca neutra: il vettore dell'adduttore lungo, che è quello che ti limita."},
-    {n:"Half frogger leg lifts + slides",p:"45\"/lato",r:"—"},
-    {n:"Straddle contract-relax",p:"5 cicli da 10\"",r:"—",
-      h:"Spingi le gambe verso l'interno al 30–40% per 10\", rilassa, scendi."},
-    {n:"Straddle caricato",p:"2×90\" · manubrio 2–4 kg",r:"—",
-      h:"Sul tessuto tendineo il carico rende più della tenuta passiva."},
-    {n:"Seated pike contract-relax",p:"5 cicli da 10\"",r:"—"},
-    {n:"Ischiocrurali a gamba tesa su rialzo",p:"90\"/lato",r:"—",h:"Bacino avanti, schiena dritta."},
-    {n:"Prone Y su panca inclinata",p:"2×12–15 · manubri 2–3 kg",r:"—"},
-    {n:"Serratus punch / push-up plus",p:"2×12–15",r:"—"},
-    {n:"Knee-to-wall",p:"2×10/lato",r:"—"},
-    {n:"Couch stretch",p:"60\"/lato",r:"—"}
+      h:"L'unico lavoro attivo di abduzione ad anca neutra: è il vettore dell'adduttore lungo, quello che i test hanno indicato."},
+    {n:"Straddle caricato con contract-relax",p:"3×60\" · manubrio 2–4 kg",r:"—",
+      h:"A metà di ogni tenuta: spingi le gambe verso l'interno al 30–40% per 10\", rilassa, scendi. Carico e contract-relax nello stesso esercizio."},
+    {n:"Ischiocrurali a gamba tesa su rialzo",p:"90\"/lato",r:"—",
+      h:"Bacino avanti, schiena dritta. Per il toe touch il lavoro pesante lo fanno Nordic curl e Jefferson curl in Lower B."},
+    {n:"Prone Y + serratus punch",p:"2×12–15 ciascuno",r:"—",
+      h:"Completa il lavoro di spalla che non entra nel riscaldamento delle upper."}
   ];
   if(w>=5) l.splice(2,0,{n:"Frog stretch con rocking",p:"90\"",r:"—",
     h:"Rientra alla settimana 5. Parti con le ginocchia più strette di quanto pensi, avanza 2–3 cm a settimana."});
+  if(walk) l.unshift({n:"Camminata",p:"45–60' · passo sostenuto",r:"—",warm:true,
+    h:"L'unico lavoro aerobico della settimana. Non interferisce con l'ipertrofia e favorisce il recupero."});
   return l;
 }
+function mobilityWalk(w){return mobility(w,true)}
 const DAILY=[
   {n:"Ginocchio alto contro elastico",p:"3×6/lato · tenuta 5\"",
     h:"Bruciore profondo davanti-dentro = giusto. Se lo senti sul lato esterno stai compensando col TFL: abbassa."},
@@ -459,7 +457,7 @@ const DAILY=[
 const DAYS=[
   {id:"upA",wd:1,d:"Lun",t:"Upper A",title:"Upper A",tag:"Pesante · petto alto e spalle",get:upperA},
   {id:"loA",wd:2,d:"Mar",t:"Lower A",title:"Lower A",tag:"Dominante ginocchio",get:lowerA,pain:true},
-  {id:"mob1",wd:3,d:"Mer",t:"Mobilità",title:"Mobilità",tag:"Adduttori · catena posteriore · caviglia",get:mobility},
+  {id:"mob1",wd:3,d:"Mer",t:"Cammino",title:"Camminata + mobilità",tag:"Cardio · 8 minuti di mobilità",get:mobilityWalk},
   {id:"upB",wd:4,d:"Gio",t:"Upper B",title:"Upper B",tag:"Volume · petto alto e spalle",get:upperB},
   {id:"loB",wd:5,d:"Ven",t:"Lower B",title:"Lower B",tag:"Dominante anca",get:lowerB,pain:true},
   {id:"mob2",wd:6,d:"Sab",t:"Mobilità",title:"Mobilità",tag:"Adduttori · catena posteriore · caviglia",get:mobility},
@@ -681,8 +679,7 @@ function viewAllen(){
   });
   h+='</div>';
 
-  if(D.id==="loA") h+='<div class="after"><b>Dopo la seduta · 5 min</b>Straddle a gambe tese con contract-relax, 5 cicli da 10 secondi.</div>';
-  if(D.id==="loB") h+='<div class="after"><b>Dopo la seduta · 5 min</b>Straddle con contract-relax + couch stretch, 60 secondi per lato.</div>';
+  if(D.id==="loB") h+='<div class="after"><b>Dopo la seduta · 3 min</b>Straddle con contract-relax + couch stretch, 60 secondi per lato.</div>';
 
   h+='<div class="closerow"><button id="closebtn" class="'+(pct>0?"ready":"")+'"'+(pct?"":" disabled")+'>'+
      (e.closed?"Seduta chiusa · tocca per riaprire":"Chiudi seduta")+'</button>'+
@@ -834,12 +831,19 @@ function viewGuide(){
      'non il massimo possibile. Flessori: peggio a destra. Monopodalico: peggio a sinistra.</p></div></details>';
 
   h+='<details><summary>Nutrizione</summary><div class="body">'+
-     '<table><tr><td>Calorie</td><td>2.500–2.700 kcal/die</td></tr>'+
+     '<table><tr><td>Calorie</td><td>2.500–2.700 kcal/die · 2.700–2.800 nei giorni di camminata</td></tr>'+
      '<tr><td>Proteine</td><td>100–120 g/die, 4 pasti da ~30 g</td></tr>'+
      '<tr><td>Creatina</td><td>3–5 g/die, monoidrato</td></tr>'+
-     '<tr><td>Crescita</td><td>+150–250 g a settimana</td></tr></table>'+
-     '<p>Pesati settimanalmente, stesse condizioni. Se entro la settimana 4 non sali di 150–250 g/settimana, aggiungi 200 kcal.</p>'+
-     '<p>Con il Crohn in remissione vale un controllo di vitamina D, B12, ferritina e albumina prima di aumentare molto le calorie.</p></div></details>';
+     '<tr><td>Crescita</td><td>+140 g a settimana (0,25% del peso)</td></tr></table>'+
+     '<h5>Se stai mettendo grasso</h5>'+
+     '<p>Pesati 3 volte a settimana, al mattino a digiuno, e usa la media settimanale. '+
+     'Salire troppo in fretta significa che il surplus va in tessuto adiposo.</p>'+
+     '<table><tr><th>Aumento medio</th><th>Cosa fare</th></tr>'+
+     '<tr><td>&gt;300 g/sett</td><td>−250 kcal</td></tr>'+
+     '<tr><td>100–250 g/sett</td><td>Non toccare niente</td></tr>'+
+     '<tr><td>&lt;100 g/sett</td><td>+150 kcal</td></tr></table>'+
+     '<p>Non scendere sotto le 2.300 kcal: sotto quella soglia perdi anche lo stimolo per costruire.</p>'+
+     '<p>Con il Crohn in remissione vale un controllo di vitamina D, B12, ferritina e albumina.</p></div></details>';
 
   h+='<details><summary>Test da fare</summary><div class="body">'+
      '<p>Servono a tarare le progressioni sui tuoi numeri invece che sulle medie. Misura sempre entrambi i lati.</p>'+
