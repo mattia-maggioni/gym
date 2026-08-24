@@ -114,6 +114,7 @@
   .row.done .name b{text-decoration:line-through;text-decoration-color:var(--dim)}
   .idx{font-family:var(--mono);font-size:11px;color:var(--dim);padding-top:3px}
   .row.warm .idx{color:var(--ochre)}
+  .row .idx.grp{color:var(--orange);font-weight:700;font-size:10.5px;letter-spacing:.04em}
   .name b{font-weight:600;font-size:15px;display:block;letter-spacing:-.005em}
   .name .presc{font-family:var(--mono);font-size:12px;color:var(--orange);margin-top:3px;
     letter-spacing:.02em}
@@ -130,6 +131,13 @@
     letter-spacing:.16em;text-transform:uppercase;color:var(--dim);text-align:center}
   .setrow.head label{display:block}
   .setrow.head{margin-bottom:-1px}
+  .setrow.fill{margin:-1px 0 2px}
+  .fillbtn{
+    background:none;border:1px dashed var(--line);border-radius:2px;color:var(--dim);
+    font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;padding:4px 2px;cursor:pointer;
+    white-space:nowrap;
+  }
+  .fillbtn:hover,.fillbtn:active{border-color:var(--orange);color:var(--orange)}
   input.load{
     width:100%;background:var(--panel);border:1px solid var(--line);border-radius:2px;
     color:var(--text);font-family:var(--mono);font-size:16px;padding:6px 7px;text-align:center;
@@ -198,6 +206,9 @@
   .block li{margin-bottom:5px}
   .block li:last-child{margin-bottom:0}
 
+  .bhead{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--orange);padding:16px 0 5px;border-bottom:1px solid var(--line)}
+  .rows .bhead:first-child{padding-top:4px}
   .after{margin:18px 0 0;padding:12px 14px;background:var(--panel);border:1px dashed var(--line);
     border-radius:2px;font-size:13.5px;color:var(--muted)}
   .after b{color:var(--text);font-family:var(--display);font-size:11px;letter-spacing:.16em;
@@ -291,22 +302,39 @@
 (function(){
 "use strict";
 
+/* diagnostica: mostra gli errori reali invece del generico "Script error." */
+var LASTERR=null;
+function showErr(msg){
+  LASTERR=String(msg).slice(0,160);
+  var el=document.getElementById("savestate");
+  if(el){ el.textContent="⚠ "+LASTERR; el.style.color="var(--red)"; }
+  try{ console.error("[workout]",msg); }catch(e){}
+}
+window.addEventListener("error",function(ev){
+  showErr(ev.message&&ev.message!=="Script error."
+    ? ev.message+(ev.lineno?" (riga "+ev.lineno+")":"")
+    : "errore esterno alla pagina, non bloccante");
+});
+window.addEventListener("unhandledrejection",function(ev){
+  showErr("promise: "+((ev.reason&&ev.reason.message)||ev.reason));
+});
+
 /* ============ PROGRAMMA ============ */
 
 function squatFor(w){
   if(w<=2) return {n:"Goblet squat profondo",p:"3×8–10 · eccentrica 3\"",r:"2'",
     h:"Calibrazione: RIR 4–5. Deve sembrarti troppo facile — è il punto dove a giugno è andata storta."};
-  if(w===3) return {n:"Squat bilanciere",p:"4×6–8 · profondità parziale",r:"2–3'",
+  if(w===3) return {n:"Back squat",p:"4×6–8 · profondità parziale",r:"2–3'",
     h:"Riparti dal 50–60% del carico di giugno. Non da quello che senti di poter fare."};
-  if(w===4) return {n:"Squat bilanciere",p:"4×6–8 · +2,5 kg",r:"2–3'",
+  if(w===4) return {n:"Back squat",p:"4×6–8 · +2,5 kg",r:"2–3'",
     h:"Aumenti solo il carico. La profondità resta quella della settimana scorsa."};
-  if(w===5) return {n:"Squat bilanciere",p:"4×6–8 · +3–4 cm di profondità",r:"2–3'",
+  if(w===5) return {n:"Back squat",p:"4×6–8 · +3–4 cm di profondità",r:"2–3'",
     h:"Aumenti solo la profondità. Carico invariato."};
-  if(w===6) return {n:"Squat bilanciere",p:"4×6–8 · +2,5 kg",r:"2–3'",h:"Solo carico."};
-  if(w===7) return {n:"Squat bilanciere",p:"4×6–8 · +3–4 cm di profondità",r:"2–3'",h:"Solo profondità."};
-  if(w===8) return {n:"Squat bilanciere",p:"4×6–8 · +2,5 kg",r:"2–3'",h:"Solo carico."};
-  return {n:"Squat bilanciere",p:"4×6–8 · profondità piena",r:"2–3'",
-    h:"Progressione normale: +2,5 kg quando chiudi 8 rip su tutte le serie."};
+  if(w===6) return {n:"Back squat",p:"4×5–7 · +2,5 kg",r:"2–3'",h:"Solo carico. Il range scende: si inizia a spostare l'accento sulla forza."};
+  if(w===7) return {n:"Back squat",p:"4×5–7 · +3–4 cm di profondità",r:"2–3'",h:"Solo profondità."};
+  if(w===8) return {n:"Back squat",p:"4×5–7 · +2,5 kg",r:"2–3'",h:"Solo carico."};
+  return {n:"Back squat",p:"4×5–6 · profondità piena",r:"3'",
+    h:"Motore di forza della settimana. RIR 1–2, mai a cedimento. +2,5 kg quando chiudi 6 rip su tutte le serie."};
 }
 function copenFor(w){
   if(w<=2) return {p:"3×15\"/lato · leva corta",h:"Appoggio sul ginocchio, rialzo 30–40 cm. Metti la gamba con le mani, non sollevarla attivamente."};
@@ -333,134 +361,152 @@ function stepUpFor(w){
 
 function upperWarm(){
   return [{n:"Face pull elastico + rotazione esterna",p:"2×15 · 2×12/lato",r:"30\"",warm:true,
-    h:"Attivazione, non allenamento. Tienilo leggero: prepara extrarotatori e controllo scapolare."}];
+    h:"Attivazione, non allenamento. Tienilo leggero: prepara extrarotatori e controllo scapolare."},
+   {n:"Estensione toracica + wall slides",p:"10 lente · 2×10",r:"—",warm:true,
+    h:"Due minuti. Se lo shoulder press a 60° diventa comodo, prova ad alzare lo schienale."}];
 }
 
 function upperA(){
   return upperWarm().concat([
-    {n:"Panca inclinata manubri 30°",p:"5×6–8",r:"2'",h:"Il tuo esercizio prioritario: capo clavicolare. Eccentrica controllata, ROM pieno."},
-    {n:"Trazioni presa prona",p:"4×5–8",r:"2'",h:"Reps fisse, non max. Quando chiudi 8 su tutte le serie, aggiungi 2,5 kg di zavorra."},
-    {n:"Shoulder press manubri",p:"3×8–10",r:"2'"},
-    {n:"Rematore bilanciere",p:"3×8–10",r:"2'"},
-    {n:"Croci manubri piane",p:"4×12–15",r:"75\"",h:"Gomiti a 15–20° fissi, 1\" di pausa in basso, fermati prima che i manubri si tocchino. Carico moderato."},
-    {n:"Lateral raise",p:"5×12–15",r:"60\"",h:"Sulle ultime 2 serie: parziali in allungamento dopo il cedimento."},
-    {n:"Close-grip bench press",p:"3×8–10",r:"90\"",h:"Presa a larghezza spalle. Sostituisce i dip: tricipiti pesanti senza stress sulla capsula anteriore."},
-    {n:"Curl panca inclinata",p:"3×8–12",r:"60\""},
-    {n:"Reverse curl EZ",p:"3×10–12",r:"45\""}
+    {n:"Panca inclinata manubri 30°",p:"5×6–8",r:"2–3'",
+      h:"Serie singole con recupero pieno: nel giorno pesante la fatica sistemica ti costa ripetizioni. Qui cerchi il carico, non il risparmio di tempo."},
+    {n:"Trazioni presa prona",p:"4×5–8",r:"2–3'",
+      h:"Serie singole. Reps fisse, non max: quando chiudi 8 su tutte le serie, aggiungi 2,5 kg di zavorra."},
+    {g:"B1",n:"Shoulder press manubri (schienale 60°)",p:"4×8–10",r:"75\" poi B2",
+      h:"Lombi a contatto, costole basse. Se l'ultima ripetizione ti fa inarcare, fermati lì."},
+    {g:"B2",n:"Chest-supported row panca 30°",p:"4×8–10",r:"75\" poi B1",
+      h:"Pausa di 1\" in contrazione. Non staccare il petto nell'ultima ripetizione."},
+    {g:"C1",n:"Croci manubri piane",p:"4×8–12",r:"60\" poi C2",
+      h:"Chiudi i gomiti, non le mani. La serie finisce quando perdi la posizione scapolare."},
+    {g:"C2",n:"Lateral raise",p:"5×12–15",r:"60\" poi C3",
+      h:"Sulle ultime 2 serie: parziali in allungamento dopo il cedimento."},
+    {g:"C3",n:"Rear delt row su panca 30°",p:"3×12–15",r:"60\" poi C1",
+      h:"Gomiti larghi e alti, tira verso la parte alta del petto, non verso i fianchi. Traiettoria più tollerata del fly e permette più carico. Fermati quando i gomiti sono in linea con le spalle."},
+    {g:"D1",n:"Close-grip bench press",p:"3×8–10",r:"45\" poi D2",
+      h:"Presa a larghezza spalle. Tricipiti pesanti senza stress sulla capsula anteriore."},
+    {g:"D2",n:"Curl panca inclinata",p:"3×8–12",r:"45\" poi D3",
+      h:"Panca a 45–60°: il braccio resta dietro il tronco e mette il capo lungo in allungamento. Non portare i gomiti avanti."},
+    {g:"D3",n:"Reverse curl EZ",p:"3×10–12",r:"45\" poi D1",
+      h:"Presa prona, carico basso, polsi dritti."}
   ]);
 }
 function upperB(){
   return upperWarm().concat([
-    {n:"Panca inclinata manubri 30°",p:"5×10–12",r:"90\""},
-    {n:"Trazioni presa neutra",p:"4×5–8",r:"2'"},
-    {n:"Shoulder press manubri",p:"3×10–12",r:"90\""},
-    {n:"Chest-supported row panca 30°",p:"3×10–12",r:"90\""},
-    {n:"Croci manubri piane",p:"4×12–15",r:"75\"",h:"Scapole retratte e depresse per tutta la serie: è ciò che protegge la spalla."},
-    {n:"Lateral raise",p:"5×12–15",r:"60\""},
-    {n:"Reverse fly panca 30°",p:"3×12–15",r:"60\""},
-    {n:"Skull crusher EZ",p:"3×10–12",r:"75\""},
-    {n:"Curl panca inclinata",p:"3×10–12",r:"60\""},
-    {n:"Reverse curl EZ con fat grip",p:"3×12–15",r:"45\""}
+    {g:"A1",n:"Panca inclinata manubri 30°",p:"5×10–12",r:"75\" poi A2"},
+    {g:"A2",n:"Trazioni presa neutra",p:"4×5–8",r:"75\" poi A1"},
+    {g:"B1",n:"Shoulder press manubri (schienale 60°)",p:"4×10–12",r:"75\" poi B2"},
+    {g:"B2",n:"Chest-supported row panca 30°",p:"4×10–12",r:"75\" poi B1"},
+    {g:"C1",n:"Croci manubri piane",p:"4×12–15",r:"60\" poi C2",
+      h:"Carico leggero. Se il controllo scapolare regge oltre le 8 ripetizioni, sali di ripetizioni prima che di peso."},
+    {g:"C2",n:"Lateral raise",p:"5×12–15",r:"60\" poi C3"},
+    {g:"C3",n:"Rear delt row su panca 30°",p:"3×15–20",r:"60\" poi C1",
+      h:"Più ripetizioni e più leggero che in Upper A. Gomiti larghi e alti, tira verso la parte alta del petto. Se il fly a braccia distese ti dà fastidio alla spalla, questa è la versione che tollererai."},
+    {g:"D1",n:"Skull crusher EZ",p:"3×10–12",r:"45\" poi D2"},
+    {g:"D2",n:"Curl panca inclinata",p:"3×10–12",r:"45\" poi D3"},
+    {g:"D3",n:"Reverse curl EZ con fat grip",p:"3×12–15",r:"45\" poi D1",
+      h:"Se l'avambraccio cede prima del brachioradiale, togli i fat grip su una serie."}
   ]);
 }
 function lowerA(w){
-  const sq=squatFor(w), cp=copenFor(w), ov=overFor(w), su=stepUpFor(w);
+  const sq=squatFor(w), cp=copenFor(w), su=stepUpFor(w);
   const list=[
-    {n:"Neck work (flex/est)",p:"2–3×15–25",r:"45–60\"",warm:true},
-    {n:"Attivazione anca (thigh master)",p:"2×15 adduzione + 2×15 abduzione",r:"30\"",warm:true,
-      h:"Prima del lavoro serio. Non costruisce forza ma sblocca l'ingresso nel Copenhagen: due serie e il bacino smette di cedere."},
-    {n:"Wall sit",p:"2×30–45\"",r:"60\"",warm:true,
-      h:"Riscaldamento e termometro: se il ginocchio protesta qui, oggi tieni i carichi fermi. Ginocchia a 90°, tibie verticali, schiena piatta al muro."},
-    {n:"Step-over sul bilanciere",p:ov.p,r:"45\"",h:ov.h},
-    {n:sq.n,p:sq.p,r:sq.r,h:sq.h},
-    {n:"RDL manubri",p:"3×10–12",r:"2'",
-      h:"Scendi solo fino a dove la schiena resta neutra. Ginocchia morbide 15–20°, manubri a contatto con la coscia."},
-    {n:"Split squat statico",p:"3×8/lato",r:"90\"",
-      h:"Piede anteriore più laterale, ginocchio verso il mignolo, peso su tallone e bordo esterno."},
-    {n:su.n,p:su.p,r:"90\"",h:su.h},
-    {n:"Cossack squat",p:"3×6–8/lato",r:"90\"",
-      h:"Gamba distesa a ginocchio teso e rotula in su: è così che carichi l'adduttore lungo invece di aggirarlo."},
-    {n:"Copenhagen",p:cp.p,r:"60\"",h:cp.h},
-    {n:"Calf raise su rialzo",p:"3×12–15",r:"90\""},
-    {n:"Leg raise supino",p:"3×10–15 · lento",r:"60\"",
-      h:"Gambe unite, su e giù su tutto il range. Flessori d'anca sotto carico più anti-estensione del core. Lombare schiacciata a terra: se si stacca, piega le ginocchia. Non far toccare i talloni tra una ripetizione e l'altra."},
-    {n:"Flutter kick",p:"3×20–30\"",r:"45\"",
-      h:"Gambe alternate a forbice, mai a terra. Mani sotto i glutei. Se la lombare si inarca la serie è finita: tieni le gambe più alte (45°) finché il core non regge — più sono basse, più è dura."},
-    {n:"Dead bug",p:"2×10/lato · lento",r:"45\"",
-      h:"Lombare schiacciata a terra per tutta la serie. È l'anti-rotazione del bacino: il pezzo che ti cedeva all'ingresso del Copenhagen."},
-    {n:"Crunch + reverse crunch",p:"3×12–15",r:"60\""}
+    {n:"Attivazione anca (thigh master)",p:"2×20 adduzione + 2×20 abduzione",r:"30\"",warm:true,
+      h:"Il tuo interruttore. Vale anche come rituale prima di salire in moto."},
+    {n:"Wall sit",p:"3×30–45\"",r:"60\"",warm:true,
+      h:"Termometro del ginocchio e lavoro sul quadricipite distale, che è il tuo punto debole. Se protesta qui, oggi non aumentare nulla."},
+    {n:sq.n,p:sq.p,r:sq.r,h:"BILATERALE PESANTE — "+sq.h},
+    {n:"Split squat statico",p:"3×8–10/lato",r:"90\"",
+      h:"MONOPODALICO IPERTROFIA — affondo lungo e discesa piena: carichi il quadricipite e alleni la mobilità dell'anca posteriore nello stesso movimento. Piede anteriore più laterale, ginocchio verso il mignolo."},
+    {g:"C1",n:su.n,p:su.p,r:"60\" poi C2",h:"SPINTA MONOPODALICA — "+su.h},
+    {g:"C2",n:"Copenhagen",p:cp.p,r:"60\" poi C1",h:"ADDUZIONE — "+cp.h},
+    {g:"D1",n:"Cossack squat",p:"3×6–8/lato",r:"45\" poi D2",
+      h:"FORZA IN ALLUNGAMENTO — gamba distesa a ginocchio teso e rotula in su. Scendi fino al limite reale: è qui che la forza produce mobilità."},
+    {g:"D2",n:"Calf raise su rialzo",p:"3×12–15",r:"45\" poi D3"},
+    {g:"D3",n:"Leg raise supino",p:"3×10–15 · lento",r:"45\" poi D1",
+      h:"Lombare schiacciata a terra: se si stacca, piega le ginocchia."}
   ];
-  if(w>=7) list.splice(7,0,{n:"Bulgarian split squat",p:w>=9?"3×8–10/lato · caricato":"3×8/lato · corpo libero",r:"90\"",
+  if(w>=7) list.splice(4,0,{n:"Bulgarian split squat",p:w>=9?"3×8–10/lato · caricato":"3×8/lato · corpo libero",r:"90\"",
     h:w>=9?"+2 kg ogni due settimane, non di più.":"Rientra a corpo libero. Filma la prima serie: se il ginocchio cade dentro, resta un'altra settimana."});
   return list;
 }
 function lowerB(w){
-  const ov=overFor(w);
+  const cp=copenFor(w);
   const list=[
-    {n:"Neck work (flex/est)",p:"2–3×15–25",r:"45–60\"",warm:true},
-    {n:"Attivazione anca (thigh master)",p:"2×15 adduzione + 2×15 abduzione",r:"30\"",warm:true},
+    {n:"Attivazione anca (thigh master)",p:"2×20 adduzione + 2×20 abduzione",r:"30\"",warm:true},
     {n:"Wall sit caricato",p:"3×30–45\" · disco 10–20 kg",r:"60\"",warm:true,
-      h:"Disco o manubrio sulle cosce. Progressione: corpo libero → carico → piedi più avanti → monopodalico 3×20–30\" a 60–70°."},
-    {n:"RDL bilanciere",p:"3×8–10",r:"2'",
-      h:"Dopo i DOMS di agosto riparti col 20–30% in meno e chiudi a RIR 4. Filma di lato la prima seduta."},
-    {n:"Leg curl TRX / Nordic assistito",p:"3×8–10",r:"90\"",
-      h:"Il Nordic allunga i fascicoli degli ischiocrurali: vale anche come lavoro per il toe touch."},
-    {n:"RDL monopodalico",p:"3×8/lato",r:"90\"",
-      h:"Equilibrio, catena posteriore e stabilità del bacino insieme, senza caricare il ginocchio."},
-    {n:"Split stance isometrico elevato",p:"3×30–45\"/lato",r:"60\"",
-      h:"Piede su rialzo 35–45 cm, l'altro a terra di lato. Spingi attivamente contro il rialzo: è la posizione del pivot turn."},
-    {n:"Step-over sul bilanciere",p:ov.p,r:"45\"",h:ov.h},
-    {n:"Clamshell con elastico",p:"3×12–15/lato",r:"45\"",
-      h:"Gluteo medio senza compressione trocanterica. Cuscino tra le ginocchia se punge. Bacino fermo, non ruotare all'indietro."},
-    {n:"Monster walk / band walk laterale",p:"2×12 passi per direzione",r:"45\""},
-    {n:"Side plank con abduzione",p:"3×10–12/lato",r:"45\"",
-      h:"Gamba leggermente indietro rispetto alla linea del corpo, non oltre i 30–40° di alzata, rotula neutra. Se punge, riduci il range."},
-    {n:"Pallof press con elastico",p:"2×10/lato",r:"45\"",
-      h:"Anti-rotazione. Elastico all'altezza del petto, spingi avanti resistendo alla torsione. Costruisce la zona che ha ceduto nel Copenhagen."},
-    {n:"Calf raise una gamba",p:"3×10–15",r:"90\""},
-    {n:"Plank zavorrata",p:"3×30–45\"",r:"60\""},
-    {n:"Jefferson curl",p:"2×6 · manubrio 4–6 kg",r:"60\"",
-      h:"Vertebra per vertebra, 20\" a ripetizione. Il singolo esercizio più efficace per arrivare alle punte."}
+      h:"Progressione: corpo libero 45\" → carico → piedi più avanti → monopodalico 3×15–20\" a 60°. Un passo alla volta."},
+    {n:"RDL bilanciere",p:w>=6?"3×5–6":"3×8–10",r:"2–3'",
+      h:"CERNIERA BILATERALE PESANTE — scendi solo fino a dove la schiena resta neutra. Ginocchia morbide 15–20°, bilanciere a contatto con la coscia. RIR 2."},
+    {n:"Glute bridge monopodalico, piede rialzato",p:"3×10–12/lato",r:"90\"",
+      h:"ESTENSIONE D'ANCA MONOPODALICA — prima dell'RDL se gli ischiocrurali crampano. Piede vicino al sedere, punta sollevata, peso sul tallone, retroversione del bacino prima di spingere."},
+    {n:"Goblet squat con pausa",p:"3×10–12 · 2\" in buca",r:"90\"",
+      h:"SECONDO STIMOLO QUADRICIPITE — pausa di 2\" in basso, senza rimbalzo. Diverso dallo squat di martedì: qui conta il tempo sotto tensione a fondo corsa, non il carico."},
+    {g:"C1",n:"Leg curl TRX / Nordic assistito",p:"3×8–10",r:"60\" poi C2",
+      h:"FLESSIONE DEL GINOCCHIO — il Nordic allunga i fascicoli degli ischiocrurali: vale anche per il toe touch."},
+    {g:"C2",n:"Copenhagen",p:cp.p,r:"60\" poi C1",h:"ADDUZIONE — seconda seduta settimanale sul punto debole. "+cp.h},
+    {g:"D1",n:"Clamshell con elastico",p:"3×12–15/lato",r:"45\" poi D2",
+      h:"ABDUZIONE — l'unico lavoro diretto sul gluteo medio. Cuscino tra le ginocchia se punge."},
+    {g:"D2",n:"Calf raise una gamba",p:"3×10–15",r:"45\" poi D3"},
+    {g:"D3",n:"Flutter kick",p:"3×20–30\"",r:"45\" poi D1",
+      h:"Mani sotto i glutei. Se la lombare si inarca la serie è finita."}
   ];
-  if(w>=8) list.splice(2,0,{n:"Stacco da terra",p:"3×6 · leggero",r:"2–3'",
-    h:"Rientra alla settimana 8, dopo che squat e RDL hanno retto. Non nella stessa seduta dello squat pesante."});
+  if(w>=8) list.splice(4,0,{n:"Stacco da terra",p:"3×5–6 · leggero",r:"2–3'",
+    h:"Rientra alla settimana 8, dopo che squat e RDL hanno retto. In alternanza con l'RDL, non insieme."});
   return list;
 }
-function mobility(w,walk){
-  const l=[
-    {n:"Supine straddle leg opens",p:"3×8/lato · gamba tesa",r:"—",
-      h:"L'unico lavoro attivo di abduzione ad anca neutra: è il vettore dell'adduttore lungo, quello che i test hanno indicato."},
-    {n:"Straddle caricato con contract-relax",p:"3×60\" · manubrio 2–4 kg",r:"—",
-      h:"A metà di ogni tenuta: spingi le gambe verso l'interno al 30–40% per 10\", rilassa, scendi. Carico e contract-relax nello stesso esercizio."},
-    {n:"Ischiocrurali a gamba tesa su rialzo",p:"90\"/lato",r:"—",
-      h:"Bacino avanti, schiena dritta. Per il toe touch il lavoro pesante lo fanno Nordic curl e Jefferson curl in Lower B."},
-    {n:"Prone Y + serratus punch",p:"2×12–15 ciascuno",r:"—",
-      h:"Completa il lavoro di spalla che non entra nel riscaldamento delle upper."}
-  ];
-  if(w>=5) l.splice(2,0,{n:"Frog stretch con rocking",p:"90\"",r:"—",
-    h:"Rientra alla settimana 5. Parti con le ginocchia più strette di quanto pensi, avanza 2–3 cm a settimana."});
-  if(walk) l.unshift({n:"Camminata",p:"45–60' · passo sostenuto",r:"—",warm:true,
-    h:"L'unico lavoro aerobico della settimana. Non interferisce con l'ipertrofia e favorisce il recupero."});
-  return l;
+function mobility(){
+  return [{n:"Camminata",p:"45–60' · passo sostenuto",r:"—",
+    h:"Non interferisce con l'ipertrofia e favorisce il recupero. Costa 200–250 kcal: aggiungi uno spuntino, o il surplus se ne va."}];
 }
-function mobilityWalk(w){return mobility(w,true)}
+function mobilityWalk(){return mobility()}
+
 const DAILY=[
-  {n:"Ginocchio alto contro elastico",p:"3×6/lato · tenuta 5\"",
-    h:"Bruciore profondo davanti-dentro = giusto. Se lo senti sul lato esterno stai compensando col TFL: abbassa."},
-  {n:"Seated leg lift",p:"3×3/lato · tenuta 10\"",h:"Anche 5 cm da terra vanno bene. È durissimo, è normale."},
-  {n:"90/90 lift-off",p:"3×5/lato · tenuta 5\"",h:"Stacca il ginocchio anteriore senza usare le mani. Flessione + rotazione insieme."},
-  {n:"Couch stretch",p:"60\"/lato"},
-  {n:"Affondo profondo con spinta del bacino",p:"45\"/lato"},
-  {n:"Knee-to-wall",p:"2×10/lato",h:"Sulla pedana il piede sta in dorsiflessione: se la caviglia è rigida, compensi con tutto il resto."}
+  /* A — apertura articolare */
+  {b:"A · Apertura articolare",n:"Hip CARs",p:"3 giri lenti per lato",
+    h:"In piedi o a quattro zampe: porta il ginocchio al massimo cerchio possibile, lentissimo, senza muovere il bacino. Serve a mappare il range, non a forzarlo."},
+  {b:"A · Apertura articolare",n:"Shoulder CARs",p:"3 giri lenti per lato",
+    h:"Braccio teso che disegna il cerchio più grande possibile. Costole basse, non inarcare."},
+  {b:"A · Apertura articolare",n:"Ankle CARs",p:"5 giri per lato",
+    h:"Seduto, gamba tesa: cerchi ampi con la caviglia in entrambi i versi."},
+
+  /* B — anca, il blocco principale */
+  {b:"B · Anca",n:"90/90 con lift-off e transizioni",p:"5 lift-off per lato + 5 transizioni",
+    h:"Il singolo esercizio più completo per l'anca: rotazione interna ed esterna sotto controllo attivo. Stacca il ginocchio anteriore senza usare le mani, poi ruota da un lato all'altro passando per il centro."},
+  {b:"B · Anca",n:"Cossack squat lento",p:"6/lato · 3\" a scendere",
+    h:"Gamba distesa a ginocchio teso e rotula in su. È forza a fine corsa sugli adduttori, che è quello che produce mobilità vera."},
+  {b:"B · Anca",n:"Supine straddle leg opens",p:"8/lato · gamba tesa",
+    h:"Supino, apri una gamba tesa lateralmente al massimo e riporta lentamente. Abduzione attiva: chiude il divario tra range passivo e attivo."},
+  {b:"B · Anca",n:"Affondo in ginocchio con retroversione",p:"45\"/lato",
+    h:"Ginocchio a terra, spingi il bacino avanti contraendo il gluteo del lato posteriore. Se inarchi la lombare invece di ruotare il bacino, non stai allungando l'ileopsoas."},
+
+  /* C — ginocchio e caviglia */
+  {b:"C · Ginocchio e caviglia",n:"Accosciata profonda con oscillazioni",p:"60\"",
+    h:"Sedere ai talloni, gomiti dentro le ginocchia che spingono in fuori. Oscilla lentamente da un lato all'altro. Se i talloni si alzano, mettici sotto un libro."},
+  {b:"C · Ginocchio e caviglia",n:"Knee-to-wall",p:"10/lato",
+    h:"Punta a 10 cm dal muro, ginocchio che tocca il muro col tallone a terra. Se non ci arrivi, avvicina il piede e misura: è il tuo dato di partenza."},
+
+  /* D — upper */
+  {b:"D · Upper",n:"Open book (rotazione toracica)",p:"8/lato · lento",
+    h:"Su un fianco, ginocchia piegate, braccia tese davanti: apri il braccio superiore e ruota il torace seguendo la mano con lo sguardo. Il bacino resta fermo."},
+  {b:"D · Upper",n:"Wall slides",p:"10",
+    h:"Schiena, testa, gomiti e polsi al muro: fai scorrere le braccia in alto senza staccare nulla. Se qualcosa si stacca, sei arrivato al tuo limite."},
+  {b:"D · Upper",n:"Band pull-apart",p:"15",
+    h:"Elastico teso davanti al petto, braccia quasi distese: apri fino a portarlo al petto. Zero compressione articolare, ottimo per il controllo scapolare."},
+
+  /* E — flow, facoltativo */
+  {b:"E · Flow (facoltativo)",n:"Beast → crab reach",p:"5/lato",
+    h:"Da quadrupedia con ginocchia sollevate, ruota e apri il bacino verso l'alto portando il braccio sopra la testa. Apre anca ed estensione toracica insieme."},
+  {b:"E · Flow (facoltativo)",n:"Frogger → down dog",p:"5",
+    h:"Dall'accosciata profonda con le mani a terra, spingi le anche verso l'alto distendendo le gambe, poi torna giù. Catena posteriore e caviglia in un movimento."}
 ];
 
 const DAYS=[
   {id:"upA",wd:1,d:"Lun",t:"Upper A",title:"Upper A",tag:"Pesante · petto alto e spalle",get:upperA},
   {id:"loA",wd:2,d:"Mar",t:"Lower A",title:"Lower A",tag:"Dominante ginocchio",get:lowerA,pain:true},
-  {id:"mob1",wd:3,d:"Mer",t:"Cammino",title:"Camminata + mobilità",tag:"Cardio · 8 minuti di mobilità",get:mobilityWalk},
+  {id:"mob1",wd:3,d:"Mer",t:"Cammino",title:"Camminata",tag:"L'unico lavoro aerobico della settimana",get:mobilityWalk},
   {id:"upB",wd:4,d:"Gio",t:"Upper B",title:"Upper B",tag:"Volume · petto alto e spalle",get:upperB},
   {id:"loB",wd:5,d:"Ven",t:"Lower B",title:"Lower B",tag:"Dominante anca",get:lowerB,pain:true},
-  {id:"mob2",wd:6,d:"Sab",t:"Mobilità",title:"Mobilità",tag:"Adduttori · catena posteriore · caviglia",get:mobility},
+  {id:"mob2",wd:6,d:"Sab",t:"Libero",title:"Libero",tag:"Recupero",get:function(){return[]}},
   {id:"rest",wd:0,d:"Dom",t:"Riposo",title:"Riposo",tag:"Recupero",get:function(){return[]}}
 ];
 
@@ -585,7 +631,7 @@ setInterval(function(){ if(dirty) flush(); },4000);
 const app=document.getElementById("app");
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 
-function render(){
+var render=function render(){
   const wd=new Date().getDay();
   if(!day) day=(DAYS.find(function(x){return x.wd===wd})||DAYS[0]).id;
 
@@ -596,7 +642,7 @@ function render(){
     '<button id="wp" aria-label="Settimana successiva">+</button></div></div>';
 
   h+='<nav role="tablist">';
-  [["allen","Allenamenti"],["quot","Ogni giorno"],["prog","Progressione"],["diario","Diario"],["guida","Guida"]].forEach(function(t){
+  [["allen","Allenamenti"],["quot","Mobilità"],["prog","Progressione"],["diario","Diario"],["guida","Guida"]].forEach(function(t){
     h+='<button role="tab" data-v="'+t[0]+'" aria-selected="'+(view===t[0])+'">'+t[1]+'</button>';
   });
   h+='</nav>';
@@ -610,8 +656,16 @@ function render(){
   h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span>'+
      '<button id="reset">Azzera tutto</button></div>';
   app.innerHTML=h;
-  wire();
+  try{ wire(); }catch(err){ showErr("wire: "+err.message); }
 }
+const _render=render;
+render=function(){
+  try{ _render(); }
+  catch(err){
+    showErr("render: "+err.message);
+    app.innerHTML='<div class="loading">Errore nel disegnare la scheda.<br><br>'+esc(err.message)+'</div>';
+  }
+};
 
 function viewAllen(){
   const D=DAYS.find(function(x){return x.id===day});
@@ -631,11 +685,11 @@ function viewAllen(){
   });
   h+='</div>';
 
-  if(D.id==="rest"){
-    h+='<div class="sesshead"><div><h1>Riposo</h1><div class="tag">Domenica</div></div></div>';
-    h+='<div class="block calm"><h4>Cosa fare</h4><p>Niente. Il recupero è dove avviene l\'adattamento, '+
-       'e con 4 sedute pesanti in settimana ti serve.</p><p>Se vuoi muoverti: cammina. '+
-       'Nient\'altro.</p></div>';
+  if(D.id==="rest"||D.id==="mob2"){
+    h+='<div class="sesshead"><div><h1>'+D.title+'</h1><div class="tag">'+D.tag+'</div></div></div>';
+    h+='<div class="block calm"><h4>Cosa fare</h4><p>La mobilità quotidiana, se non l\'hai già fatta. '+
+       'Per il resto niente: il recupero è dove avviene l\'adattamento, e con 4 sedute pesanti in settimana ti serve.</p>'+
+       '<p>Se vuoi muoverti: cammina.</p></div>';
     return h;
   }
 
@@ -643,6 +697,16 @@ function viewAllen(){
      '<div class="gauge"><b class="'+(pct===100?"full":"")+'">'+pct+'%</b><i>'+done+'/'+total+' serie</i></div></div>'+
      '<div class="bar"><i class="'+(pct===100?"full":"")+'" style="width:'+pct+'%"></i></div>';
 
+  if(D.id==="upA"){
+    h+='<div class="block"><h4>Struttura</h4>'+
+       '<p>I primi due esercizi sono a <b>serie singole con recupero pieno</b>: nel giorno pesante la fatica sistemica costa ripetizioni.</p>'+
+       '<p>Dal blocco B in poi si alterna: una serie di B1, recupero breve, una di B2, e così via. Ogni muscolo recupera comunque il suo tempo.</p></div>';
+  }
+  if(D.id==="upB"){
+    h+='<div class="block"><h4>Come leggere i blocchi</h4>'+
+       '<p>A1 e A2 si alternano: una serie del primo, recupero breve, una del secondo. Ogni muscolo recupera comunque il tempo pieno, ma la seduta dura molto meno. '+
+       'Qui i carichi sono più bassi, quindi si può accoppiare anche i fondamentali.</p></div>';
+  }
   if(D.id==="loA"&&S.week<=2){
     h+='<div class="block warn"><h4>Settimane 1–2 · calibrazione</h4>'+
        '<p>Chiudi tutte le serie a RIR 4–5. Devi finire con la sensazione di aver fatto poco: è corretto così. '+
@@ -652,6 +716,13 @@ function viewAllen(){
        '<p>Questa settimana cambi solo ciò che è scritto sullo squat. Tutto il resto resta com\'era: '+
        'è l\'errore che ti ha fermato a giugno.</p></div>';
   }
+  if(D.id.indexOf("lo")===0){
+    h+='<div class="block calm"><h4>Un esercizio per pattern</h4>'+
+       '<p>Un bilaterale pesante come motore di forza (RIR 1–2, mai a cedimento), '+
+       'poi monopodalico per l\'ipertrofia e per l\'asimmetria, poi i due punti deboli.</p>'+
+       '<p>Il lavoro di flessibilità è dentro gli esercizi: Cossack, split squat profondo e Copenhagen a leva lunga '+
+       'sono forza a ROM completo, che produce mobilità quanto lo stretching.</p></div>';
+  }
 
   h+='<div class="rows">';
   ex.forEach(function(x,i){
@@ -659,7 +730,7 @@ function viewAllen(){
     let c=0;for(let j=0;j<n;j++) if(a[j]) c++;
     const ld=normLoad(e.load[i],n);
     h+='<div class="row'+(c===n?" done":"")+(x.warm?" warm":"")+'">'+
-       '<div class="idx">'+(x.warm?"○":String(i+1).padStart(2,"0"))+'</div>'+
+       '<div class="idx'+(x.g?" grp":"")+'">'+(x.warm?"○":(x.g||String(i+1).padStart(2,"0")))+'</div>'+
        '<div class="name"><b>'+esc(x.n)+'</b><div class="presc">'+esc(x.p)+'</div>'+
        (x.h?'<div class="hint">'+esc(x.h)+'</div>':'')+'</div>'+
        '<div class="rest">'+esc(x.r||"")+'</div>'+
@@ -670,6 +741,10 @@ function viewAllen(){
          '<input class="load" inputmode="decimal" data-ex="'+i+'" data-set="'+j+'" data-f="kg" data-name="'+esc(x.n)+'" placeholder="—" value="'+esc(ld[j].kg)+'">'+
          '<input class="load" inputmode="numeric" data-ex="'+i+'" data-set="'+j+'" data-f="rep" data-name="'+esc(x.n)+'" placeholder="—" value="'+esc(ld[j].rep)+'">'+
          '<button class="tick" data-ex="'+i+'" data-set="'+j+'" aria-pressed="'+(!!a[j])+'" aria-label="Serie '+(j+1)+' fatta"></button></div>';
+      if(j===0&&n>1) h+='<div class="setrow fill"><div class="no"></div>'+
+         '<button class="fillbtn" data-ex="'+i+'" data-f="kg" data-name="'+esc(x.n)+'">↓ stesso kg</button>'+
+         '<button class="fillbtn" data-ex="'+i+'" data-f="rep" data-name="'+esc(x.n)+'">↓ stesse rip</button>'+
+         '<div></div></div>';
     }
     h+='</div>';
     const lh=lastHist(x.n);
@@ -714,20 +789,23 @@ function viewDaily(){
   const d=S.daily[k]||{};
   let done=0;DAILY.forEach(function(x,i){if(d[i])done++});
   const pct=Math.round(done/DAILY.length*100);
-  let h='<div class="sesshead"><div><h1>Ogni giorno</h1><div class="tag">9 minuti · il binario moto</div></div>'+
+  let h='<div class="sesshead"><div><h1>Mobilità</h1><div class="tag">12–15 minuti · ogni giorno</div></div>'+
     '<div class="gauge"><b class="'+(pct===100?"full":"")+'">'+pct+'%</b><i>'+done+'/'+DAILY.length+'</i></div></div>'+
     '<div class="bar"><i class="'+(pct===100?"full":"")+'" style="width:'+pct+'%"></i></div>';
-  h+='<div class="block"><h4>Perché quotidiano</h4><p>Carico bassissimo e adattamento in gran parte neurale: '+
-     'qui la frequenza rende più del volume concentrato. Step-over e step-up invece sono allenamento vero '+
-     'e stanno nelle sedute lower.</p></div>';
+  h+='<div class="block"><h4>Serve un tappetino e un elastico</h4>'+
+     '<p>Ovunque, ogni giorno. I blocchi A–D sono la sostanza: il lavoro attivo a fine corsa è quello che produce mobilità vera, '+
+     'più dello stretching passivo. Il blocco E è coordinazione — utile e piacevole, ma facoltativo.</p>'+
+     '<p>Prima di salire in moto: thigh master, 20 ripetizioni per verso.</p></div>';
   h+='<div class="rows">';
+  let lastB=null;
   DAILY.forEach(function(x,i){
+    if(x.b&&x.b!==lastB){ lastB=x.b; h+='<div class="bhead">'+esc(x.b)+'</div>'; }
     h+='<div class="row'+(d[i]?" done":"")+'"><div class="idx">'+String(i+1).padStart(2,"0")+'</div>'+
        '<div class="name"><b>'+esc(x.n)+'</b><div class="presc">'+esc(x.p)+'</div>'+
        (x.h?'<div class="hint">'+esc(x.h)+'</div>':'')+'</div><div class="rest"></div>'+
        '<div class="ctrl"><div class="ticks"><button class="tick" data-daily="'+i+'" aria-pressed="'+(!!d[i])+'" aria-label="Fatto"></button></div></div></div>';
   });
-  h+='</div><div class="after"><b>Se hai solo 5 minuti</b>Ginocchio alto con elastico, 90/90 lift-off, couch stretch. Sono i tre che pesano di più.</div>';
+  h+='</div><div class="after"><b>Se hai 5 minuti</b>Blocco B per intero. L\'anca è la priorità e il 90/90 da solo vale metà della routine.</div>';
   return h;
 }
 
@@ -780,10 +858,10 @@ function viewGuide(){
   const w=S.week;
   const prog=[[1,"Goblet squat, RIR 4–5","Calibrazione. Deve sembrarti troppo facile"],
     [2,"Goblet squat, RIR 4–5","Calibrazione"],
-    [3,"Squat bilanciere 50–60%","Profondità parziale"],
+    [3,"Back squat 4×6–8 al 50–60%","Profondità parziale"],
     [4,"+2,5 kg","Solo carico"],
     [5,"+3–4 cm profondità","Rientra il frog · Cossack caricato"],
-    [6,"+2,5 kg squat e RDL","Solo carico"],
+    [6,"4×5–7, +2,5 kg","Range scende: accento sulla forza. RDL a 3×5–6"],
     [7,"+3–4 cm profondità","Bulgarian a corpo libero, filmato"],
     [8,"+2,5 kg","Entra lo stacco in Lower B"]];
   let h='<div class="sesshead"><div><h1>Guida</h1><div class="tag">Regole, progressioni, riferimenti</div></div></div>';
@@ -954,6 +1032,22 @@ function wire(){
     inp.oninput=commit;
     inp.onblur=commit;
   });
+  document.querySelectorAll('.fillbtn').forEach(function(b){
+    b.onclick=function(){
+      const D=DAYS.find(function(x){return x.id===day}), e=entry(D.id),
+            i=+b.dataset.ex, f=b.dataset.f, n=setsOf(D.get(S.week)[i].p);
+      const ld=normLoad(e.load[i],n);
+      const v=ld[0][f];
+      if(!v){ b.textContent="prima riempi la 1ª"; setTimeout(function(){b.textContent=f==="kg"?"↓ stesso kg":"↓ stesse rip"},1600); return; }
+      for(let k=1;k<n;k++) ld[k][f]=v;
+      e.load[i]=ld;
+      document.querySelectorAll('input.load[data-ex="'+i+'"][data-f="'+f+'"]').forEach(function(inp){
+        inp.value=ld[+inp.dataset.set][f]||"";
+      });
+      pushHist(b.dataset.name, loadSummary(ld));
+      save();
+    };
+  });
   document.querySelectorAll('.prev').forEach(function(b){
     b.onclick=function(){
       const D=DAYS.find(function(x){return x.id===day}), i=+b.dataset.ex, e=entry(D.id),
@@ -1001,7 +1095,7 @@ function wire(){
     e.closed=e.closed?null:new Date().toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
     if(!e.closed) delete e.closed;
     dirty=true;clearTimeout(saveTimer);
-    await flush();
+    try{ await flush(); }catch(err){ showErr("salvataggio: "+err.message); }
     render();
   };
   /* --- backup --- */
@@ -1077,6 +1171,6 @@ function wire(){
   };
 }
 
-load().then(render).catch(function(e){console.error(e);render()});
+load().then(render).catch(function(e){ showErr("avvio: "+(e&&e.message||e)); render(); });
 })();
 </script>
