@@ -323,18 +323,18 @@ window.addEventListener("unhandledrejection",function(ev){
 
 function squatFor(w){
   if(w<=2) return {n:"Goblet squat profondo",p:"3×8–10 · eccentrica 3\"",r:"2'",
-    h:"Calibrazione: RIR 4–5. Deve sembrarti troppo facile — è il punto dove a giugno è andata storta."};
-  if(w===3) return {n:"Back squat",p:"4×6–8 · profondità parziale",r:"2–3'",
-    h:"Riparti dal 50–60% del carico di giugno. Non da quello che senti di poter fare."};
-  if(w===4) return {n:"Back squat",p:"4×6–8 · +2,5 kg",r:"2–3'",
-    h:"Aumenti solo il carico. La profondità resta quella della settimana scorsa."};
-  if(w===5) return {n:"Back squat",p:"4×6–8 · +3–4 cm di profondità",r:"2–3'",
-    h:"Aumenti solo la profondità. Carico invariato."};
-  if(w===6) return {n:"Back squat",p:"4×5–7 · +2,5 kg",r:"2–3'",h:"Solo carico. Il range scende: si inizia a spostare l'accento sulla forza."};
-  if(w===7) return {n:"Back squat",p:"4×5–7 · +3–4 cm di profondità",r:"2–3'",h:"Solo profondità."};
-  if(w===8) return {n:"Back squat",p:"4×5–7 · +2,5 kg",r:"2–3'",h:"Solo carico."};
+    h:"Calibrazione: RIR 4–5. Talloni su un rialzo piatto di 2–3 cm."};
+  if(w===3) return {n:"Back squat",p:"4×6–8 · 25 kg · profondità parziale",r:"2–3'",
+    h:"Riferimento: a giugno il dolore è comparso a 45 kg. Si riparte dal 55%."};
+  if(w===4) return {n:"Back squat",p:"4×6–8 · 30 kg",r:"2–3'",
+    h:"+5 kg: la seduta precedente non ha dato nessun segnale, il gradino può essere più largo. Solo carico, profondità invariata."};
+  if(w===5) return {n:"Back squat",p:"4×6–8 · 35 kg",r:"2–3'",h:"Solo carico."};
+  if(w===6) return {n:"Back squat",p:"4×5–7 · 35 kg · +3–4 cm di profondità",r:"2–3'",
+    h:"Solo profondità, e il range scende: si inizia a spostare l'accento sulla forza."};
+  if(w===7) return {n:"Back squat",p:"4×5–7 · 40 kg",r:"2–3'",h:"Solo carico."};
+  if(w===8) return {n:"Back squat",p:"4×5–7 · +3–4 cm di profondità",r:"2–3'",h:"Solo profondità."};
   return {n:"Back squat",p:"4×5–6 · profondità piena",r:"3'",
-    h:"Motore di forza della settimana. RIR 1–2, mai a cedimento. +2,5 kg quando chiudi 6 rip su tutte le serie."};
+    h:"RIR 1–2, mai a cedimento. +2,5 kg quando chiudi 6 rip su tutte le serie. Talloni su rialzo piatto, non sui dischi: destabilizzano."};
 }
 function copenFor(w){
   if(w<=2) return {p:"3×15\"/lato · leva corta",h:"Appoggio sul ginocchio, rialzo 30–40 cm. Metti la gamba con le mani, non sollevarla attivamente."};
@@ -369,89 +369,82 @@ function upperWarm(){
 function upperA(){
   return upperWarm().concat([
     {n:"Panca inclinata manubri 30°",p:"5×6–8",r:"2–3'",
-      h:"Serie singole con recupero pieno: nel giorno pesante la fatica sistemica ti costa ripetizioni. Qui cerchi il carico, non il risparmio di tempo."},
-    {n:"Trazioni presa prona",p:"4×5–8",r:"2–3'",
-      h:"Serie singole. Reps fisse, non max: quando chiudi 8 su tutte le serie, aggiungi 2,5 kg di zavorra."},
+      h:"Serie singole con recupero pieno. Sali dritto, senza portare i manubri a convergere: la tensione resta costante fino in cima."},
+    {n:"Trazioni presa neutra",p:"4×5–8",r:"2–3'",
+      h:"Reps fisse, non max. Quando chiudi 8 su tutte le serie, aggiungi 2,5 kg di zavorra."},
     {g:"B1",n:"Shoulder press manubri (schienale 60°)",p:"4×8–10",r:"75\" poi B2",
-      h:"Lombi a contatto, costole basse. Se l'ultima ripetizione ti fa inarcare, fermati lì."},
-    {g:"B2",n:"Chest-supported row panca 30°",p:"4×8–10",r:"75\" poi B1",
-      h:"Pausa di 1\" in contrazione. Non staccare il petto nell'ultima ripetizione."},
-    {g:"C1",n:"Croci manubri piane",p:"4×8–12",r:"60\" poi C2",
-      h:"Chiudi i gomiti, non le mani. La serie finisce quando perdi la posizione scapolare."},
-    {g:"C2",n:"Lateral raise",p:"5×12–15",r:"60\" poi C3",
-      h:"Sulle ultime 2 serie: parziali in allungamento dopo il cedimento."},
-    {g:"C3",n:"Rear delt row su panca 30°",p:"3×12–15",r:"60\" poi C1",
-      h:"Gomiti larghi e alti, tira verso la parte alta del petto, non verso i fianchi. Traiettoria più tollerata del fly e permette più carico. Fermati quando i gomiti sono in linea con le spalle."},
-    {g:"D1",n:"Close-grip bench press",p:"3×8–10",r:"45\" poi D2",
-      h:"Presa a larghezza spalle. Tricipiti pesanti senza stress sulla capsula anteriore."},
-    {g:"D2",n:"Curl panca inclinata",p:"3×8–12",r:"45\" poi D3",
-      h:"Panca a 45–60°: il braccio resta dietro il tronco e mette il capo lungo in allungamento. Non portare i gomiti avanti."},
-    {g:"D3",n:"Reverse curl EZ",p:"3×10–12",r:"45\" poi D1",
-      h:"Presa prona, carico basso, polsi dritti."}
+      h:"Lombi a contatto, costole basse. Se l'ultima ripetizione ti fa inarcare, fermati lì invece di completarla."},
+    {g:"B2",n:"Chest-supported row, gomiti larghi",p:"4×8–10",r:"75\" poi B1",
+      h:"Gomiti larghi e alti, tira verso la parte alta del petto: così copre anche il deltoide posteriore. Fermati quando i gomiti sono in linea con le spalle, mai oltre. Carico basso, zero slancio."},
+    {g:"C1",n:"Lateral raise",p:"6×12–15",r:"60\" poi C2",
+      h:"Inclinati avanti di 10–15°, fermati appena sopra l'orizzontale. Sulle ultime 2 serie: parziali in allungamento dopo il cedimento."},
+    {g:"C2",n:"Curl panca inclinata",p:"3×8–12",r:"60\" poi C1",
+      h:"Braccio dietro il tronco: è il vantaggio della variante. Non portare i gomiti avanti."},
+    {n:"Skull crusher EZ",p:"3×10–12",r:"75\"",
+      h:"Gomiti fermi per tutta la serie. Scendi dietro la testa, non alla fronte: più allungamento del capo lungo, meno stress sul gomito."}
   ]);
 }
 function upperB(){
   return upperWarm().concat([
-    {g:"A1",n:"Panca inclinata manubri 30°",p:"5×10–12",r:"75\" poi A2"},
+    {g:"A1",n:"Panca inclinata manubri 30°",p:"5×10–12",r:"75\" poi A2",
+      h:"Se per stare nel range devi scendere sotto i 14 kg, resta a 14 e lavora nel range che viene: sotto quel carico il limite diventano i stabilizzatori, non il petto."},
     {g:"A2",n:"Trazioni presa neutra",p:"4×5–8",r:"75\" poi A1"},
     {g:"B1",n:"Shoulder press manubri (schienale 60°)",p:"4×10–12",r:"75\" poi B2"},
-    {g:"B2",n:"Chest-supported row panca 30°",p:"4×10–12",r:"75\" poi B1"},
-    {g:"C1",n:"Croci manubri piane",p:"4×12–15",r:"60\" poi C2",
-      h:"Carico leggero. Se il controllo scapolare regge oltre le 8 ripetizioni, sali di ripetizioni prima che di peso."},
-    {g:"C2",n:"Lateral raise",p:"5×12–15",r:"60\" poi C3"},
-    {g:"C3",n:"Rear delt row su panca 30°",p:"3×15–20",r:"60\" poi C1",
-      h:"Più ripetizioni e più leggero che in Upper A. Gomiti larghi e alti, tira verso la parte alta del petto. Se il fly a braccia distese ti dà fastidio alla spalla, questa è la versione che tollererai."},
-    {g:"D1",n:"Skull crusher EZ",p:"3×10–12",r:"45\" poi D2"},
-    {g:"D2",n:"Curl panca inclinata",p:"3×10–12",r:"45\" poi D3"},
-    {g:"D3",n:"Reverse curl EZ con fat grip",p:"3×12–15",r:"45\" poi D1",
-      h:"Se l'avambraccio cede prima del brachioradiale, togli i fat grip su una serie."}
+    {g:"B2",n:"Chest-supported row, gomiti larghi",p:"4×10–12",r:"75\" poi B1",
+      h:"Pausa di 1\" in contrazione. Non staccare il petto nell'ultima ripetizione."},
+    {g:"C1",n:"Lateral raise",p:"6×12–15",r:"60\" poi C2"},
+    {g:"C2",n:"Croci manubri piane",p:"4×8–12",r:"60\" poi C1",
+      h:"4–6 kg. Chiudi i gomiti, non le mani. La serie finisce quando perdi la posizione scapolare, non alle 12 ripetizioni."},
+    {n:"Hammer / reverse curl EZ",p:"3×10–12",r:"45\""}
   ]);
 }
 function lowerA(w){
   const sq=squatFor(w), cp=copenFor(w), su=stepUpFor(w);
   const list=[
     {n:"Attivazione anca (thigh master)",p:"2×20 adduzione + 2×20 abduzione",r:"30\"",warm:true,
-      h:"Il tuo interruttore. Vale anche come rituale prima di salire in moto."},
-    {n:"Wall sit",p:"3×30–45\"",r:"60\"",warm:true,
-      h:"Termometro del ginocchio e lavoro sul quadricipite distale, che è il tuo punto debole. Se protesta qui, oggi non aumentare nulla."},
+      h:"Vale anche come rituale prima di salire in moto."},
+    {n:"10 squat a corpo libero",p:"10 lenti",r:"—",warm:true,
+      h:"Termometro: se il ginocchio protesta qui, oggi non aumentare nulla."},
     {n:sq.n,p:sq.p,r:sq.r,h:"BILATERALE PESANTE — "+sq.h},
-    {n:"Split squat statico",p:"3×8–10/lato",r:"90\"",
-      h:"MONOPODALICO IPERTROFIA — affondo lungo e discesa piena: carichi il quadricipite e alleni la mobilità dell'anca posteriore nello stesso movimento. Piede anteriore più laterale, ginocchio verso il mignolo."},
-    {g:"C1",n:su.n,p:su.p,r:"60\" poi C2",h:"SPINTA MONOPODALICA — "+su.h},
+    {n:su.n,p:su.p,r:"90\"",h:"MONOPODALICO — "+su.h+" Due dita sul rack finché l'equilibrio non regge: meglio un appoggio leggero che fermarsi prima di aver caricato la gamba."},
+    {g:"C1",n:"Cossack squat",p:"3×6–8/lato",r:"60\" poi C2",
+      h:"FORZA IN ALLUNGAMENTO — ginocchio teso e rotula in su sulla gamba distesa. Se tira all'interno del ginocchio, riduci la distanza tra i piedi."},
     {g:"C2",n:"Copenhagen",p:cp.p,r:"60\" poi C1",h:"ADDUZIONE — "+cp.h},
-    {g:"D1",n:"Cossack squat",p:"3×6–8/lato",r:"45\" poi D2",
-      h:"FORZA IN ALLUNGAMENTO — gamba distesa a ginocchio teso e rotula in su. Scendi fino al limite reale: è qui che la forza produce mobilità."},
-    {g:"D2",n:"Calf raise su rialzo",p:"3×12–15",r:"45\" poi D3"},
-    {g:"D3",n:"Leg raise supino",p:"3×10–15 · lento",r:"45\" poi D1",
-      h:"Lombare schiacciata a terra: se si stacca, piega le ginocchia."}
+    {g:"D1",n:"Calf raise su rialzo, pausa 2\" in basso",p:"3×12–15",r:"45\" poi D2",
+      h:"La pausa in allungamento lavora anche la dorsiflessione: knee-to-wall 8 cm a destra, 10 a sinistra."},
+    {g:"D2",n:"Reverse crunch",p:"3×12–15",r:"45\" poi D3"},
+    {g:"D3",n:"Crunch zavorrato",p:"3×10–12",r:"45\" poi D1"},
+    {n:"Wall sit",p:"3×30\" · disco 10 kg",r:"60\"",
+      h:"In chiusura: all'inizio ti lasciava la sensazione di gonfiore per tutta la seduta. Piedi a larghezza anca, ginocchia a 90°, tibie verticali, posizione identica dal primo all'ultimo secondo."}
   ];
   if(w>=7) list.splice(4,0,{n:"Bulgarian split squat",p:w>=9?"3×8–10/lato · caricato":"3×8/lato · corpo libero",r:"90\"",
-    h:w>=9?"+2 kg ogni due settimane, non di più.":"Rientra a corpo libero. Filma la prima serie: se il ginocchio cade dentro, resta un'altra settimana."});
+    h:w>=9?"+2 kg ogni due settimane.":"Rientra a corpo libero. Filma la prima serie."});
   return list;
 }
 function lowerB(w){
   const cp=copenFor(w);
   const list=[
     {n:"Attivazione anca (thigh master)",p:"2×20 adduzione + 2×20 abduzione",r:"30\"",warm:true},
-    {n:"Wall sit caricato",p:"3×30–45\" · disco 10–20 kg",r:"60\"",warm:true,
-      h:"Progressione: corpo libero 45\" → carico → piedi più avanti → monopodalico 3×15–20\" a 60°. Un passo alla volta."},
-    {n:"RDL bilanciere",p:w>=6?"3×5–6":"3×8–10",r:"2–3'",
-      h:"CERNIERA BILATERALE PESANTE — scendi solo fino a dove la schiena resta neutra. Ginocchia morbide 15–20°, bilanciere a contatto con la coscia. RIR 2."},
-    {n:"Glute bridge monopodalico, piede rialzato",p:"3×10–12/lato",r:"90\"",
-      h:"ESTENSIONE D'ANCA MONOPODALICA — prima dell'RDL se gli ischiocrurali crampano. Piede vicino al sedere, punta sollevata, peso sul tallone, retroversione del bacino prima di spingere."},
-    {n:"Goblet squat con pausa",p:"3×10–12 · 2\" in buca",r:"90\"",
-      h:"SECONDO STIMOLO QUADRICIPITE — pausa di 2\" in basso, senza rimbalzo. Diverso dallo squat di martedì: qui conta il tempo sotto tensione a fondo corsa, non il carico."},
-    {g:"C1",n:"Leg curl TRX / Nordic assistito",p:"3×8–10",r:"60\" poi C2",
-      h:"FLESSIONE DEL GINOCCHIO — il Nordic allunga i fascicoli degli ischiocrurali: vale anche per il toe touch."},
+    {n:"10 squat a corpo libero",p:"10 lenti",r:"—",warm:true,h:"Termometro e riscaldamento."},
+    {n:"Reverse hyper su panca",p:"3×12",r:"60\"",
+      h:"ESTENSIONE D'ANCA — pancia sulla panca, gambe fuori che si alzano. Sostituisce il glute bridge: stessa funzione, nessun crampo perché gli ischiocrurali lavorano accorciandosi."},
+    {n:"RDL bilanciere",p:w>=6?"3×5–6 · 40 kg":"3×8–10 · 30 kg",r:"2–3'",
+      h:"CERNIERA PESANTE — bilanciere a contatto con la coscia per tutta la discesa, ginocchia morbide 15–20° e tibia verticale. Il fondo corsa è dove il bacino smette di ruotare: per te appena sotto il ginocchio. Inspira in cima e trattieni per tutta la ripetizione."},
+    {n:"Goblet squat con pausa",p:"3×10–12 · 12–14 kg · 2\" in buca",r:"90\"",
+      h:"SECONDO STIMOLO QUADRICIPITE — pausa piena senza rimbalzo. Nel punto basso spingi i gomiti contro l'interno delle ginocchia."},
+    {g:"C1",n:"Leg curl TRX",p:"3×6–8",r:"60\" poi C2",
+      h:"FLESSIONE DEL GINOCCHIO — bacino alto, linea spalle-anche-ginocchia. Progressione: eccentrica 4\" → pausa 1\" in contrazione → monopodalico. Se crampa, fermati a 6."},
     {g:"C2",n:"Copenhagen",p:cp.p,r:"60\" poi C1",h:"ADDUZIONE — seconda seduta settimanale sul punto debole. "+cp.h},
     {g:"D1",n:"Clamshell con elastico",p:"3×12–15/lato",r:"45\" poi D2",
       h:"ABDUZIONE — l'unico lavoro diretto sul gluteo medio. Cuscino tra le ginocchia se punge."},
-    {g:"D2",n:"Calf raise una gamba",p:"3×10–15",r:"45\" poi D3"},
-    {g:"D3",n:"Flutter kick",p:"3×20–30\"",r:"45\" poi D1",
-      h:"Mani sotto i glutei. Se la lombare si inarca la serie è finita."}
+    {g:"D2",n:"Calf raise una gamba, pausa 2\" in basso",p:"3×10–15",r:"45\" poi D3"},
+    {g:"D3",n:"Suitcase carry",p:"3×30\"/lato",r:"45\" poi D1",
+      h:"Manubrio pesante in una mano. Anti-inclinazione laterale, obliqui e quadrato dei lombi, più la presa."},
+    {n:"Wall sit caricato",p:"3×30\" · disco 10–15 kg",r:"60\"",
+      h:"In chiusura. Quando reggi 3×45\" con 15–20 kg, passa al monopodalico a 60°, 15–20\"/lato: è anche la misura dell'asimmetria."}
   ];
   if(w>=8) list.splice(4,0,{n:"Stacco da terra",p:"3×5–6 · leggero",r:"2–3'",
-    h:"Rientra alla settimana 8, dopo che squat e RDL hanno retto. In alternanza con l'RDL, non insieme."});
+    h:"In alternanza con l'RDL, non insieme."});
   return list;
 }
 function mobility(){
@@ -472,6 +465,8 @@ const DAILY=[
   /* B — anca, il blocco principale */
   {b:"B · Anca",n:"90/90 con lift-off e transizioni",p:"5 lift-off per lato + 5 transizioni",
     h:"Il singolo esercizio più completo per l'anca: rotazione interna ed esterna sotto controllo attivo. Stacca il ginocchio anteriore senza usare le mani, poi ruota da un lato all'altro passando per il centro."},
+  {b:"B · Anca",n:"Standing fire hydrant (gate opener)",p:"8/lato · lento",
+    h:"In piedi, ginocchio che sale davanti e ruota in fuori fino all'altezza del ginocchio opposto, poi torna. È il gesto della sella: abduzione e rotazione esterna in carico. Progressione: appoggio pieno al rack → due dita → niente, poi elastico sopra le ginocchia. Lo scrocchio senza dolore è tendine che scavalca l'osso: benigno, si riduce col tempo."},
   {b:"B · Anca",n:"Cossack squat lento",p:"6/lato · 3\" a scendere",
     h:"Gamba distesa a ginocchio teso e rotula in su. È forza a fine corsa sugli adduttori, che è quello che produce mobilità vera."},
   {b:"B · Anca",n:"Supine straddle leg opens",p:"8/lato · gamba tesa",
@@ -908,7 +903,7 @@ function viewGuide(){
      '<h5>Simmetria</h5><p>Parti sempre dal lato debole e fai sull\'altro lo stesso numero di ripetizioni, '+
      'non il massimo possibile. Flessori: peggio a destra. Monopodalico: peggio a sinistra.</p></div></details>';
 
-  h+='<details><summary>Nutrizione</summary><div class="body">'+
+  h+='<details open><summary>Nutrizione · priorità attuale</summary><div class="body">'+
      '<table><tr><td>Calorie</td><td>2.500–2.700 kcal/die · 2.700–2.800 nei giorni di camminata</td></tr>'+
      '<tr><td>Proteine</td><td>100–120 g/die, 4 pasti da ~30 g</td></tr>'+
      '<tr><td>Creatina</td><td>3–5 g/die, monoidrato</td></tr>'+
@@ -921,6 +916,12 @@ function viewGuide(){
      '<tr><td>100–250 g/sett</td><td>Non toccare niente</td></tr>'+
      '<tr><td>&lt;100 g/sett</td><td>+150 kcal</td></tr></table>'+
      '<p>Non scendere sotto le 2.300 kcal: sotto quella soglia perdi anche lo stimolo per costruire.</p>'+
+     '<h5>Le 300 kcal più facili da aggiungere</h5><ul>'+
+     '<li>30 g di frutta secca — ~200 kcal in un pugno</li>'+
+     '<li>Un cucchiaio di olio extravergine in più su ogni piatto — ~120 kcal</li>'+
+     '<li>Shaker: latte intero, banana, burro d\'arachidi, proteine — ~500 kcal in due minuti</li></ul>'+
+     '<p>I liquidi calorici sono l\'arma migliore per chi fa fatica a mangiare: non saziano come il solido.</p>'+
+     '<p><b>È il collo di bottiglia attuale.</b> I carichi salgono e il volume è sufficiente, ma con il peso fermo il risultato resta parziale.</p>'+
      '<p>Con il Crohn in remissione vale un controllo di vitamina D, B12, ferritina e albumina.</p></div></details>';
 
   h+='<details><summary>Test da fare</summary><div class="body">'+
