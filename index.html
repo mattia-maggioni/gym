@@ -1,4 +1,14 @@
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>Workout Plan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- apertura a schermo intero dalla home screen -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Workout">
+<meta name="theme-color" content="#17181A">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzE3MTgxQSIvPjxyZWN0IHg9IjMwIiB5PSI4MiIgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxNiIgcng9IjMiIGZpbGw9IiNFMjU3MUMiLz48cmVjdCB4PSIxOCIgeT0iNjYiIHdpZHRoPSIyNCIgaGVpZ2h0PSI0OCIgcng9IjUiIGZpbGw9IiNFOUU2REYiLz48cmVjdCB4PSIxMzgiIHk9IjY2IiB3aWR0aD0iMjQiIGhlaWdodD0iNDgiIHJ4PSI1IiBmaWxsPSIjRTlFNkRGIi8+PC9zdmc+">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -24,6 +34,7 @@
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   button,input,textarea,select,summary,.chip,.tick,.flag,.prev{touch-action:manipulation}
   input,textarea{font-size:16px}
+  :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
   body{
     margin:0;background:var(--ink);color:var(--text);
     font-family:var(--body);font-size:15px;line-height:1.5;
@@ -277,6 +288,7 @@
   .foot{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);
     display:flex;justify-content:space-between;align-items:center;gap:12px}
   .foot span{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.1em}
+  .foot .ver{opacity:.55;margin-left:auto;margin-right:10px}
   .foot button{background:none;border:1px solid var(--line);color:var(--dim);
     font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
     padding:7px 11px;border-radius:2px;cursor:pointer}
@@ -648,7 +660,7 @@ var render=function render(){
   else if(view==="diario") h+=viewDiary();
   else h+=viewGuide();
 
-  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span>'+
+  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v12 · 12 ott</span>'+
      '<button id="reset">Azzera tutto</button></div>';
   app.innerHTML=h;
   try{ wire(); }catch(err){ showErr("wire: "+err.message); }
