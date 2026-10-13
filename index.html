@@ -440,8 +440,8 @@ function lowerB(w){
     {n:"10 squat a corpo libero",p:"10 lenti",r:"—",warm:true,h:"Termometro e riscaldamento."},
     {n:"Reverse hyper su panca",p:"3×12",r:"60\"",
       h:"ESTENSIONE D'ANCA — pancia sulla panca, gambe fuori che si alzano. Sostituisce il glute bridge: stessa funzione, nessun crampo perché gli ischiocrurali lavorano accorciandosi."},
-    {n:"RDL bilanciere",p:w>=6?"3×5–6 · 40 kg":"3×8–10 · 30 kg",r:"2–3'",
-      h:"CERNIERA PESANTE — bilanciere a contatto con la coscia per tutta la discesa, ginocchia morbide 15–20° e tibia verticale. Il fondo corsa è dove il bacino smette di ruotare: per te appena sotto il ginocchio. Inspira in cima e trattieni per tutta la ripetizione."},
+    {n:"RDL bilanciere",p:w>=6?"3×5–6 · 30 kg":"3×8–10 · 20 kg",r:"2–3'",
+      h:"CERNIERA PESANTE — ripartenza dopo l'episodio lombare: 20 kg e +2,5 per volta, non di più. Bilanciere a contatto con la coscia, ginocchia morbide 15–20°, tibia verticale. Il fondo corsa è dove il bacino smette di ruotare: per te appena sotto il ginocchio. Inspira in cima e trattieni per tutta la ripetizione."},
     {n:"Goblet squat con pausa",p:"3×10–12 · 12–14 kg · 2\" in buca",r:"90\"",
       h:"SECONDO STIMOLO QUADRICIPITE — pausa piena senza rimbalzo. Nel punto basso spingi i gomiti contro l'interno delle ginocchia."},
     {g:"C1",n:"Leg curl TRX",p:"3×6–8",r:"60\" poi C2",
@@ -450,8 +450,8 @@ function lowerB(w){
     {g:"D1",n:"Clamshell con elastico",p:"3×12–15/lato",r:"45\" poi D2",
       h:"ABDUZIONE — l'unico lavoro diretto sul gluteo medio. Cuscino tra le ginocchia se punge."},
     {g:"D2",n:"Calf raise una gamba, pausa 2\" in basso",p:"3×10–15",r:"45\" poi D3"},
-    {g:"D3",n:"Suitcase carry",p:"3×30\"/lato",r:"45\" poi D1",
-      h:"Manubrio pesante in una mano. Anti-inclinazione laterale, obliqui e quadrato dei lombi, più la presa."},
+    {g:"D3",n:"Suitcase deadlift",p:"3×8/lato · da 8–10 kg",r:"45\" poi D1",
+      h:"Un manubrio a fianco del corpo, stacco da terra con schiena neutra. Allena il gesto che ti ha irritato la lombare: raccogliere pesi da terra. +2 kg a settimana — in due mesi raccogliere 20 kg diventa banale. Obliqui e quadrato dei lombi come il carry, ma con il sollevamento dentro."},
     {n:"Wall sit caricato",p:"3×30\" · disco 10–15 kg",r:"60\"",
       h:"In chiusura. Quando reggi 3×45\" con 15–20 kg, passa al monopodalico a 60°, 15–20\"/lato: è anche la misura dell'asimmetria."}
   ];
@@ -660,7 +660,7 @@ var render=function render(){
   else if(view==="diario") h+=viewDiary();
   else h+=viewGuide();
 
-  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v12 · 12 ott</span>'+
+  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v13 · 13 ott</span>'+
      '<button id="reset">Azzera tutto</button></div>';
   app.innerHTML=h;
   try{ wire(); }catch(err){ showErr("wire: "+err.message); }
@@ -912,6 +912,10 @@ function viewGuide(){
      '<h5>Step-over</h5><ul><li>Ginocchio alto e piegato, non gamba tesa</li>'+
      '<li>Busto eretto: se ti inclini, la barra è troppo alta</li>'+
      '<li>Devi poterti fermare 2 secondi con la gamba sospesa</li></ul>'+
+     '<h5>Prendere i manubri</h5>'+
+     '<p>Mai da terra in piedi. Tienili su un rialzo all\'altezza di ginocchia o anca, o caricali direttamente sulla panca.</p>'+
+     '<p>Per la panca inclinata: siediti, manubri in verticale sulle cosce, poi sdraiati indietro spingendoli su con le ginocchia uno alla volta.</p>'+
+     '<p>Il gesto non si evita per sempre: lo si allena. Suitcase deadlift in Lower B, +2 kg a settimana.</p>'+
      '<h5>Simmetria</h5><p>Parti sempre dal lato debole e fai sull\'altro lo stesso numero di ripetizioni, '+
      'non il massimo possibile. Flessori: peggio a destra. Monopodalico: peggio a sinistra.</p></div></details>';
 
