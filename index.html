@@ -373,40 +373,43 @@ function stepUpFor(w){
 
 function upperWarm(){
   return [{n:"Face pull elastico + rotazione esterna",p:"2×15 · 2×12/lato",r:"30\"",warm:true,
-    h:"Attivazione, non allenamento. Tienilo leggero: prepara extrarotatori e controllo scapolare."},
-   {n:"Estensione toracica + wall slides",p:"10 lente · 2×10",r:"—",warm:true,
-    h:"Due minuti. Se lo shoulder press a 60° diventa comodo, prova ad alzare lo schienale."}];
+    h:"Attivazione, non allenamento. Tienilo leggero: prepara extrarotatori e controllo scapolare."}];
 }
 
 function upperA(){
   return upperWarm().concat([
+    {n:"Lateral raise · blocco 1",p:"3×12–15",r:"60\"",
+      h:"PRIORITÀ — da fresco, carico pieno. Se chiudi 15 su tutte e tre, sali di peso. Inclinati avanti 10–15°, fermati appena sopra l'orizzontale."},
     {n:"Panca inclinata manubri 30°",p:"5×6–8",r:"2–3'",
-      h:"Serie singole con recupero pieno. Sali dritto, senza portare i manubri a convergere: la tensione resta costante fino in cima."},
+      h:"Sali dritto, senza portare i manubri a convergere: la tensione resta costante fino in cima. Prendili dalla panca o dalle cosce, mai da terra."},
     {n:"Trazioni presa neutra",p:"4×5–8",r:"2–3'",
       h:"Reps fisse, non max. Quando chiudi 8 su tutte le serie, aggiungi 2,5 kg di zavorra."},
     {g:"B1",n:"Shoulder press manubri (schienale 60°)",p:"4×8–10",r:"75\" poi B2",
-      h:"Lombi a contatto, costole basse. Se l'ultima ripetizione ti fa inarcare, fermati lì invece di completarla."},
+      h:"Lombi a contatto, costole basse. Se l'ultima ripetizione ti fa inarcare, fermati lì."},
     {g:"B2",n:"Chest-supported row, gomiti larghi",p:"4×8–10",r:"75\" poi B1",
-      h:"Gomiti larghi e alti, tira verso la parte alta del petto: così copre anche il deltoide posteriore. Fermati quando i gomiti sono in linea con le spalle, mai oltre. Carico basso, zero slancio."},
-    {g:"C1",n:"Lateral raise",p:"6×12–15",r:"60\" poi C2",
-      h:"Inclinati avanti di 10–15°, fermati appena sopra l'orizzontale. Sulle ultime 2 serie: parziali in allungamento dopo il cedimento."},
-    {g:"C2",n:"Curl panca inclinata",p:"3×8–12",r:"60\" poi C1",
+      h:"Gomiti larghi e alti, tira verso la parte alta del petto: copre anche il deltoide posteriore. Fermati quando i gomiti sono in linea con le spalle."},
+    {n:"Lateral raise · blocco 2",p:"3×15–20",r:"60\"",
+      h:"Qui conta il volume: carico più basso del blocco 1, ripetizioni più alte. Sulle ultime 2 serie, parziali in allungamento dopo il cedimento."},
+    {g:"C1",n:"Curl panca inclinata",p:"3×8–12",r:"60\" poi C2",
       h:"Braccio dietro il tronco: è il vantaggio della variante. Non portare i gomiti avanti."},
-    {n:"Skull crusher EZ",p:"3×10–12",r:"75\"",
-      h:"Gomiti fermi per tutta la serie. Scendi dietro la testa, non alla fronte: più allungamento del capo lungo, meno stress sul gomito."}
+    {g:"C2",n:"Skull crusher EZ",p:"3×10–12",r:"60\" poi C1",
+      h:"Gomiti fermi. Scendi dietro la testa, non alla fronte."}
   ]);
 }
 function upperB(){
   return upperWarm().concat([
+    {n:"Lateral raise · blocco 1",p:"3×12–15",r:"60\"",
+      h:"PRIORITÀ — da fresco, carico pieno."},
     {g:"A1",n:"Panca inclinata manubri 30°",p:"5×10–12",r:"75\" poi A2",
-      h:"Se per stare nel range devi scendere sotto i 14 kg, resta a 14 e lavora nel range che viene: sotto quel carico il limite diventano i stabilizzatori, non il petto."},
+      h:"Se per stare nel range devi scendere sotto i 14 kg, resta a 14: sotto quel carico il limite diventano gli stabilizzatori, non il petto."},
     {g:"A2",n:"Trazioni presa neutra",p:"4×5–8",r:"75\" poi A1"},
     {g:"B1",n:"Shoulder press manubri (schienale 60°)",p:"4×10–12",r:"75\" poi B2"},
     {g:"B2",n:"Chest-supported row, gomiti larghi",p:"4×10–12",r:"75\" poi B1",
       h:"Pausa di 1\" in contrazione. Non staccare il petto nell'ultima ripetizione."},
-    {g:"C1",n:"Lateral raise",p:"6×12–15",r:"60\" poi C2"},
-    {g:"C2",n:"Croci manubri piane",p:"4×8–12",r:"60\" poi C1",
-      h:"4–6 kg. Chiudi i gomiti, non le mani. La serie finisce quando perdi la posizione scapolare, non alle 12 ripetizioni."},
+    {n:"Lateral raise · blocco 2",p:"3×15–20",r:"60\"",
+      h:"Volume, non carico. Parziali in allungamento sulle ultime 2 serie."},
+    {n:"Dip",p:"4×6–10",r:"2'",
+      h:"Secondo angolo sul petto: spinta verticale, petto basso e sternale, che l'inclinata non tocca. FERMATI A 90° DI GOMITO — tutto il rischio per la spalla sta sotto quella soglia. Busto inclinato avanti per enfasi sul petto. Corpo libero finché non chiudi 4×8 puliti, poi zavorra."},
     {n:"Hammer / reverse curl EZ",p:"3×10–12",r:"45\""}
   ]);
 }
@@ -419,6 +422,10 @@ function lowerA(w){
       h:"Termometro: se il ginocchio protesta qui, oggi non aumentare nulla."},
     {n:sq.n,p:sq.p,r:sq.r,h:"BILATERALE PESANTE — "+sq.h},
     {n:su.n,p:su.p,r:"90\"",h:"MONOPODALICO — "+su.h+" Due dita sul rack finché l'equilibrio non regge: meglio un appoggio leggero che fermarsi prima di aver caricato la gamba."},
+    {n:"Standing hip flexor raise",p:"3×6–8/lato · manubrio 2–4 kg",r:"60\"",
+      h:"FLESSORE D'ANCA — in piedi su un rialzo, manubrio appeso al piede. Sali sopra i 90°, pausa 1–2\" in alto, discesa lenta. Il manubrio instabile ti obbliga a controllare. Se senti lavorare il lato esterno dell'anca invece della profondità davanti-dentro, stai compensando col TFL: riduci carico o altezza."},
+    {n:"Split squat statico",p:"2×8/lato · corpo libero",r:"60\"",
+      h:"REINTRODUZIONE — passo corto, ginocchio posteriore che si piega scendendo, retroversione del bacino (gluteo dietro contratto). Quattro settimane a corpo libero qualunque cosa succeda, poi +2 kg per volta."},
     {g:"C1",n:"Cossack squat",p:"3×6–8/lato",r:"60\" poi C2",
       h:"FORZA IN ALLUNGAMENTO — ginocchio teso e rotula in su sulla gamba distesa. Se tira all'interno del ginocchio, riduci la distanza tra i piedi."},
     {g:"C2",n:"Copenhagen",p:cp.p,r:"60\" poi C1",h:"ADDUZIONE — "+cp.h},
@@ -429,8 +436,9 @@ function lowerA(w){
     {n:"Wall sit",p:"3×30\" · disco 10 kg",r:"60\"",
       h:"In chiusura: all'inizio ti lasciava la sensazione di gonfiore per tutta la seduta. Piedi a larghezza anca, ginocchia a 90°, tibie verticali, posizione identica dal primo all'ultimo secondo."}
   ];
-  if(w>=7) list.splice(4,0,{n:"Bulgarian split squat",p:w>=9?"3×8–10/lato · caricato":"3×8/lato · corpo libero",r:"90\"",
-    h:w>=9?"+2 kg ogni due settimane.":"Rientra a corpo libero. Filma la prima serie."});
+  list.splice(list.length-1,0,{n:"Bulgarian split squat",p:w>=11?"3×8–10/lato · caricato":"2×6/lato · corpo libero",r:"60\"",
+    h:w>=11?"+2 kg ogni due settimane, non di più."
+          :"REINTRODUZIONE — piede posteriore su un rialzo basso (20 cm, non la panca). Filma la prima serie: se il ginocchio cade dentro, resta un'altra settimana. Quattro settimane a corpo libero prima di caricare."});
   return list;
 }
 function lowerB(w){
@@ -452,6 +460,10 @@ function lowerB(w){
     {g:"D2",n:"Calf raise una gamba, pausa 2\" in basso",p:"3×10–15",r:"45\" poi D3"},
     {g:"D3",n:"Suitcase deadlift",p:"3×8/lato · da 8–10 kg",r:"45\" poi D1",
       h:"Un manubrio a fianco del corpo, stacco da terra con schiena neutra. Allena il gesto che ti ha irritato la lombare: raccogliere pesi da terra. +2 kg a settimana — in due mesi raccogliere 20 kg diventa banale. Obliqui e quadrato dei lombi come il carry, ma con il sollevamento dentro."},
+    {g:"E1",n:"90/90 con lift-off",p:"3×5/lato · tenuta 5\"",r:"30\" poi E2",
+      h:"ROTAZIONE D'ANCA — stacca il ginocchio anteriore senza usare le mani. Flessione e rotazione insieme: il pattern della sella."},
+    {g:"E2",n:"Standing fire hydrant",p:"3×8/lato",r:"30\" poi E1",
+      h:"ABDUZIONE IN CARICO — ginocchio che sale davanti e ruota in fuori. Progressione: appoggio pieno al rack → due dita → niente → elastico sopra le ginocchia."},
     {n:"Wall sit caricato",p:"3×30\" · disco 10–15 kg",r:"60\"",
       h:"In chiusura. Quando reggi 3×45\" con 15–20 kg, passa al monopodalico a 60°, 15–20\"/lato: è anche la misura dell'asimmetria."}
   ];
@@ -466,45 +478,12 @@ function mobility(){
 function mobilityWalk(){return mobility()}
 
 const DAILY=[
-  /* A — apertura articolare */
-  {b:"A · Apertura articolare",n:"Hip CARs",p:"3 giri lenti per lato",
-    h:"In piedi o a quattro zampe: porta il ginocchio al massimo cerchio possibile, lentissimo, senza muovere il bacino. Serve a mappare il range, non a forzarlo."},
-  {b:"A · Apertura articolare",n:"Shoulder CARs",p:"3 giri lenti per lato",
-    h:"Braccio teso che disegna il cerchio più grande possibile. Costole basse, non inarcare."},
-  {b:"A · Apertura articolare",n:"Ankle CARs",p:"5 giri per lato",
-    h:"Seduto, gamba tesa: cerchi ampi con la caviglia in entrambi i versi."},
-
-  /* B — anca, il blocco principale */
-  {b:"B · Anca",n:"90/90 con lift-off e transizioni",p:"5 lift-off per lato + 5 transizioni",
-    h:"Il singolo esercizio più completo per l'anca: rotazione interna ed esterna sotto controllo attivo. Stacca il ginocchio anteriore senza usare le mani, poi ruota da un lato all'altro passando per il centro."},
-  {b:"B · Anca",n:"Standing fire hydrant (gate opener)",p:"8/lato · lento",
-    h:"In piedi, ginocchio che sale davanti e ruota in fuori fino all'altezza del ginocchio opposto, poi torna. È il gesto della sella: abduzione e rotazione esterna in carico. Progressione: appoggio pieno al rack → due dita → niente, poi elastico sopra le ginocchia. Lo scrocchio senza dolore è tendine che scavalca l'osso: benigno, si riduce col tempo."},
-  {b:"B · Anca",n:"Cossack squat lento",p:"6/lato · 3\" a scendere",
-    h:"Gamba distesa a ginocchio teso e rotula in su. È forza a fine corsa sugli adduttori, che è quello che produce mobilità vera."},
-  {b:"B · Anca",n:"Supine straddle leg opens",p:"8/lato · gamba tesa",
-    h:"Supino, apri una gamba tesa lateralmente al massimo e riporta lentamente. Abduzione attiva: chiude il divario tra range passivo e attivo."},
-  {b:"B · Anca",n:"Affondo in ginocchio con retroversione",p:"45\"/lato",
-    h:"Ginocchio a terra, spingi il bacino avanti contraendo il gluteo del lato posteriore. Se inarchi la lombare invece di ruotare il bacino, non stai allungando l'ileopsoas."},
-
-  /* C — ginocchio e caviglia */
-  {b:"C · Ginocchio e caviglia",n:"Accosciata profonda con oscillazioni",p:"60\"",
-    h:"Sedere ai talloni, gomiti dentro le ginocchia che spingono in fuori. Oscilla lentamente da un lato all'altro. Se i talloni si alzano, mettici sotto un libro."},
-  {b:"C · Ginocchio e caviglia",n:"Knee-to-wall",p:"10/lato",
-    h:"Punta a 10 cm dal muro, ginocchio che tocca il muro col tallone a terra. Se non ci arrivi, avvicina il piede e misura: è il tuo dato di partenza."},
-
-  /* D — upper */
-  {b:"D · Upper",n:"Open book (rotazione toracica)",p:"8/lato · lento",
-    h:"Su un fianco, ginocchia piegate, braccia tese davanti: apri il braccio superiore e ruota il torace seguendo la mano con lo sguardo. Il bacino resta fermo."},
-  {b:"D · Upper",n:"Wall slides",p:"10",
-    h:"Schiena, testa, gomiti e polsi al muro: fai scorrere le braccia in alto senza staccare nulla. Se qualcosa si stacca, sei arrivato al tuo limite."},
-  {b:"D · Upper",n:"Band pull-apart",p:"15",
-    h:"Elastico teso davanti al petto, braccia quasi distese: apri fino a portarlo al petto. Zero compressione articolare, ottimo per il controllo scapolare."},
-
-  /* E — flow, facoltativo */
-  {b:"E · Flow (facoltativo)",n:"Beast → crab reach",p:"5/lato",
-    h:"Da quadrupedia con ginocchia sollevate, ruota e apri il bacino verso l'alto portando il braccio sopra la testa. Apre anca ed estensione toracica insieme."},
-  {b:"E · Flow (facoltativo)",n:"Frogger → down dog",p:"5",
-    h:"Dall'accosciata profonda con le mani a terra, spingi le anche verso l'alto distendendo le gambe, poi torna giù. Catena posteriore e caviglia in un movimento."}
+  {n:"90/90 con lift-off",p:"3×5/lato · tenuta 5\"",
+    h:"Il più completo per l'anca: rotazione interna ed esterna sotto controllo attivo."},
+  {n:"Standing fire hydrant",p:"3×8/lato",
+    h:"Ginocchio che sale davanti e ruota in fuori. È il gesto della sella."},
+  {n:"Couch stretch",p:"60\"/lato",
+    h:"Per la gamba d'appoggio: deve poter estendere l'anca. Con otto ore al giorno seduto, è il tessuto che incontri meno."}
 ];
 
 const DAYS=[
@@ -660,7 +639,7 @@ var render=function render(){
   else if(view==="diario") h+=viewDiary();
   else h+=viewGuide();
 
-  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v13 · 13 ott</span>'+
+  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v17 · 21 ott</span>'+
      '<button id="reset">Azzera tutto</button></div>';
   app.innerHTML=h;
   try{ wire(); }catch(err){ showErr("wire: "+err.message); }
@@ -796,12 +775,12 @@ function viewDaily(){
   const d=S.daily[k]||{};
   let done=0;DAILY.forEach(function(x,i){if(d[i])done++});
   const pct=Math.round(done/DAILY.length*100);
-  let h='<div class="sesshead"><div><h1>Mobilità</h1><div class="tag">12–15 minuti · ogni giorno</div></div>'+
+  let h='<div class="sesshead"><div><h1>Mobilità</h1><div class="tag">3 minuti · giorni off, facoltativa</div></div>'+
     '<div class="gauge"><b class="'+(pct===100?"full":"")+'">'+pct+'%</b><i>'+done+'/'+DAILY.length+'</i></div></div>'+
     '<div class="bar"><i class="'+(pct===100?"full":"")+'" style="width:'+pct+'%"></i></div>';
-  h+='<div class="block"><h4>Serve un tappetino e un elastico</h4>'+
-     '<p>Ovunque, ogni giorno. I blocchi A–D sono la sostanza: il lavoro attivo a fine corsa è quello che produce mobilità vera, '+
-     'più dello stretching passivo. Il blocco E è coordinazione — utile e piacevole, ma facoltativo.</p>'+
+  h+='<div class="block"><h4>Facoltativa</h4>'+
+     '<p>Il lavoro sull\'anca sta dentro le sedute: hip flexor raise in Lower A, 90/90 e fire hydrant in Lower B. '+
+     'Questi tre sono un extra per i giorni off, non un obbligo.</p>'+
      '<p>Prima di salire in moto: thigh master, 20 ripetizioni per verso.</p></div>';
   h+='<div class="rows">';
   let lastB=null;
@@ -812,7 +791,7 @@ function viewDaily(){
        (x.h?'<div class="hint">'+esc(x.h)+'</div>':'')+'</div><div class="rest"></div>'+
        '<div class="ctrl"><div class="ticks"><button class="tick" data-daily="'+i+'" aria-pressed="'+(!!d[i])+'" aria-label="Fatto"></button></div></div></div>';
   });
-  h+='</div><div class="after"><b>Se hai 5 minuti</b>Blocco B per intero. L\'anca è la priorità e il 90/90 da solo vale metà della routine.</div>';
+  h+='</div><div class="after"><b>Nota</b>Il thigh master resta il rituale prima di guidare: 20 ripetizioni per verso, effetto immediato.</div>';
   return h;
 }
 
