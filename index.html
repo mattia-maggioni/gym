@@ -378,17 +378,17 @@ function upperWarm(){
 
 function upperA(){
   return upperWarm().concat([
-    {n:"Lateral raise · blocco 1",p:"3×12–15",r:"60\"",
+    {n:"Lateral raise A · blocco 1",p:"3×12–15",r:"60\"",
       h:"PRIORITÀ — da fresco, carico pieno. Se chiudi 15 su tutte e tre, sali di peso. Inclinati avanti 10–15°, fermati appena sopra l'orizzontale."},
-    {n:"Panca inclinata manubri 30°",p:"5×6–8",r:"2–3'",
+    {n:"Panca inclinata 30° · A pesante",p:"5×6–8",r:"2–3'",
       h:"Sali dritto, senza portare i manubri a convergere: la tensione resta costante fino in cima. Prendili dalla panca o dalle cosce, mai da terra."},
-    {n:"Trazioni presa neutra",p:"4×5–8",r:"2–3'",
+    {n:"Trazioni neutre · A",p:"4×5–8",r:"2–3'",
       h:"Reps fisse, non max. Quando chiudi 8 su tutte le serie, aggiungi 2,5 kg di zavorra."},
-    {g:"B1",n:"Shoulder press manubri (schienale 60°)",p:"4×8–10",r:"75\" poi B2",
+    {g:"B1",n:"Shoulder press 60° · A",p:"4×8–10",r:"75\" poi B2",
       h:"Lombi a contatto, costole basse. Se l'ultima ripetizione ti fa inarcare, fermati lì."},
-    {g:"B2",n:"Chest-supported row, gomiti larghi",p:"4×8–10",r:"75\" poi B1",
+    {g:"B2",n:"Chest-supported row · A",p:"4×8–10",r:"75\" poi B1",
       h:"Gomiti larghi e alti, tira verso la parte alta del petto: copre anche il deltoide posteriore. Fermati quando i gomiti sono in linea con le spalle."},
-    {n:"Lateral raise · blocco 2",p:"3×15–20",r:"60\"",
+    {n:"Lateral raise A · blocco 2",p:"3×15–20",r:"60\"",
       h:"Qui conta il volume: carico più basso del blocco 1, ripetizioni più alte. Sulle ultime 2 serie, parziali in allungamento dopo il cedimento."},
     {g:"C1",n:"Curl panca inclinata",p:"3×8–12",r:"60\" poi C2",
       h:"Braccio dietro il tronco: è il vantaggio della variante. Non portare i gomiti avanti."},
@@ -398,15 +398,15 @@ function upperA(){
 }
 function upperB(){
   return upperWarm().concat([
-    {n:"Lateral raise · blocco 1",p:"3×12–15",r:"60\"",
+    {n:"Lateral raise B · blocco 1",p:"3×12–15",r:"60\"",
       h:"PRIORITÀ — da fresco, carico pieno."},
-    {g:"A1",n:"Panca inclinata manubri 30°",p:"5×10–12",r:"75\" poi A2",
+    {g:"A1",n:"Panca inclinata 30° · B volume",p:"5×10–12",r:"75\" poi A2",
       h:"Se per stare nel range devi scendere sotto i 14 kg, resta a 14: sotto quel carico il limite diventano gli stabilizzatori, non il petto."},
-    {g:"A2",n:"Trazioni presa neutra",p:"4×5–8",r:"75\" poi A1"},
-    {g:"B1",n:"Shoulder press manubri (schienale 60°)",p:"4×10–12",r:"75\" poi B2"},
-    {g:"B2",n:"Chest-supported row, gomiti larghi",p:"4×10–12",r:"75\" poi B1",
+    {g:"A2",n:"Trazioni neutre · B",p:"4×5–8",r:"75\" poi A1"},
+    {g:"B1",n:"Shoulder press 60° · B",p:"4×10–12",r:"75\" poi B2"},
+    {g:"B2",n:"Chest-supported row · B",p:"4×10–12",r:"75\" poi B1",
       h:"Pausa di 1\" in contrazione. Non staccare il petto nell'ultima ripetizione."},
-    {n:"Lateral raise · blocco 2",p:"3×15–20",r:"60\"",
+    {n:"Lateral raise B · blocco 2",p:"3×15–20",r:"60\"",
       h:"Volume, non carico. Parziali in allungamento sulle ultime 2 serie."},
     {n:"Dip",p:"4×6–10",r:"2'",
       h:"Secondo angolo sul petto: spinta verticale, petto basso e sternale, che l'inclinata non tocca. FERMATI A 90° DI GOMITO — tutto il rischio per la spalla sta sotto quella soglia. Busto inclinato avanti per enfasi sul petto. Corpo libero finché non chiudi 4×8 puliti, poi zavorra."},
@@ -414,63 +414,49 @@ function upperB(){
   ]);
 }
 function lowerA(w){
-  const sq=squatFor(w), cp=copenFor(w), su=stepUpFor(w);
-  const list=[
-    {n:"Attivazione anca (thigh master)",p:"2×20 adduzione + 2×20 abduzione",r:"30\"",warm:true,
-      h:"Vale anche come rituale prima di salire in moto."},
+  const sq=squatFor(w), cp=copenFor(w);
+  return [
     {n:"10 squat a corpo libero",p:"10 lenti",r:"—",warm:true,
-      h:"Termometro: se il ginocchio protesta qui, oggi non aumentare nulla."},
-    {n:sq.n,p:sq.p,r:sq.r,h:"BILATERALE PESANTE — "+sq.h},
-    {n:su.n,p:su.p,r:"90\"",h:"MONOPODALICO — "+su.h+" Due dita sul rack finché l'equilibrio non regge: meglio un appoggio leggero che fermarsi prima di aver caricato la gamba."},
-    {n:"Standing hip flexor raise",p:"3×6–8/lato · manubrio 2–4 kg",r:"60\"",
-      h:"FLESSORE D'ANCA — in piedi su un rialzo, manubrio appeso al piede. Sali sopra i 90°, pausa 1–2\" in alto, discesa lenta. Il manubrio instabile ti obbliga a controllare. Se senti lavorare il lato esterno dell'anca invece della profondità davanti-dentro, stai compensando col TFL: riduci carico o altezza."},
-    {n:"Split squat statico",p:"2×8/lato · corpo libero",r:"60\"",
-      h:"REINTRODUZIONE — passo corto, ginocchio posteriore che si piega scendendo, retroversione del bacino (gluteo dietro contratto). Quattro settimane a corpo libero qualunque cosa succeda, poi +2 kg per volta."},
-    {g:"C1",n:"Cossack squat",p:"3×6–8/lato",r:"60\" poi C2",
-      h:"FORZA IN ALLUNGAMENTO — ginocchio teso e rotula in su sulla gamba distesa. Se tira all'interno del ginocchio, riduci la distanza tra i piedi."},
-    {g:"C2",n:"Copenhagen",p:cp.p,r:"60\" poi C1",h:"ADDUZIONE — "+cp.h},
-    {g:"D1",n:"Calf raise su rialzo, pausa 2\" in basso",p:"3×12–15",r:"45\" poi D2",
+      h:"Riscaldamento e termometro: se il ginocchio protesta qui, oggi non aumentare nulla."},
+    {n:sq.n,p:sq.p.replace("4×","5×"),r:sq.r,h:"GINOCCHIO BILATERALE PESANTE — "+sq.h},
+    {n:"RDL monopodalico",p:"3×10/lato",r:"90\"",
+      h:"ANCA MONOPODALICA — equilibrio, catena posteriore e stabilità del bacino insieme. Parti dal lato debole e fai sull'altro lo stesso numero, non il massimo."},
+    {n:"Standing hip flexor raise",p:"3×8/lato · manubrio 2–4 kg",r:"60\"",
+      h:"FLESSORE D'ANCA — in piedi su un rialzo, manubrio appeso al piede. Sali sopra i 90°, pausa 1–2\" in alto, discesa lenta. Se senti il lato esterno dell'anca invece della profondità davanti-dentro, stai compensando col TFL: riduci carico o altezza."},
+    {n:"Copenhagen · A",p:cp.p,r:"60\"",h:"ADDUTTORI — "+cp.h},
+    {g:"C1",n:"Pallof press",p:"3×10/lato · pausa 3\"",r:"45\" poi C2",
+      h:"ANTI-ROTAZIONE — elastico all'altezza del petto, spingi avanti resistendo alla torsione. Progressione: allontanati dall'ancoraggio → pausa più lunga → half-kneeling → in ginocchio → overhead."},
+    {g:"C2",n:"Reverse crunch",p:"3×12–15",r:"45\" poi C3",
+      h:"Lombare schiacciata a terra, movimento dal bacino non dallo slancio delle gambe."},
+    {g:"C3",n:"Calf raise su rialzo, pausa 2\" in basso",p:"3×12–15",r:"45\" poi C1",
       h:"La pausa in allungamento lavora anche la dorsiflessione: knee-to-wall 8 cm a destra, 10 a sinistra."},
-    {g:"D2",n:"Reverse crunch",p:"3×12–15",r:"45\" poi D3"},
-    {g:"D3",n:"Crunch zavorrato",p:"3×10–12",r:"45\" poi D1"},
-    {n:"Wall sit",p:"3×30\" · disco 10 kg",r:"60\"",
-      h:"In chiusura: all'inizio ti lasciava la sensazione di gonfiore per tutta la seduta. Piedi a larghezza anca, ginocchia a 90°, tibie verticali, posizione identica dal primo all'ultimo secondo."}
+    {n:"Wall sit caricato",p:"3×30–45\" · disco 10–15 kg",r:"60\"",
+      h:"In chiusura. Piedi a larghezza anca, ginocchia a 90°, tibie verticali, posizione identica dal primo all'ultimo secondo. Quando reggi 3×45\" con 15–20 kg, passa al monopodalico a 60°, 15–20\"/lato."}
   ];
-  list.splice(list.length-1,0,{n:"Bulgarian split squat",p:w>=11?"3×8–10/lato · caricato":"2×6/lato · corpo libero",r:"60\"",
-    h:w>=11?"+2 kg ogni due settimane, non di più."
-          :"REINTRODUZIONE — piede posteriore su un rialzo basso (20 cm, non la panca). Filma la prima serie: se il ginocchio cade dentro, resta un'altra settimana. Quattro settimane a corpo libero prima di caricare."});
-  return list;
 }
 function lowerB(w){
   const cp=copenFor(w);
-  const list=[
-    {n:"Attivazione anca (thigh master)",p:"2×20 adduzione + 2×20 abduzione",r:"30\"",warm:true},
-    {n:"10 squat a corpo libero",p:"10 lenti",r:"—",warm:true,h:"Termometro e riscaldamento."},
-    {n:"Reverse hyper su panca",p:"3×12",r:"60\"",
-      h:"ESTENSIONE D'ANCA — pancia sulla panca, gambe fuori che si alzano. Sostituisce il glute bridge: stessa funzione, nessun crampo perché gli ischiocrurali lavorano accorciandosi."},
+  return [
+    {n:"10 squat a corpo libero",p:"10 lenti",r:"—",warm:true,h:"Riscaldamento e termometro."},
     {n:"RDL bilanciere",p:w>=6?"3×5–6 · 30 kg":"3×8–10 · 20 kg",r:"2–3'",
-      h:"CERNIERA PESANTE — ripartenza dopo l'episodio lombare: 20 kg e +2,5 per volta, non di più. Bilanciere a contatto con la coscia, ginocchia morbide 15–20°, tibia verticale. Il fondo corsa è dove il bacino smette di ruotare: per te appena sotto il ginocchio. Inspira in cima e trattieni per tutta la ripetizione."},
-    {n:"Goblet squat con pausa",p:"3×10–12 · 12–14 kg · 2\" in buca",r:"90\"",
-      h:"SECONDO STIMOLO QUADRICIPITE — pausa piena senza rimbalzo. Nel punto basso spingi i gomiti contro l'interno delle ginocchia."},
-    {g:"C1",n:"Leg curl TRX",p:"3×6–8",r:"60\" poi C2",
+      h:"ANCA BILATERALE PESANTE — bilanciere a contatto con la coscia, ginocchia morbide 15–20°, tibia verticale. Il fondo corsa è dove il bacino smette di ruotare: per te appena sotto il ginocchio. Inspira in cima e trattieni per tutta la ripetizione. Carica il bilanciere nel rack, mai da terra."},
+    {n:"Bulgarian split squat",p:"3×8/lato",r:"90\"",
+      h:"GINOCCHIO MONOPODALICO — piede anteriore più laterale, ginocchio verso il mignolo, peso su tallone e bordo esterno, busto leggermente avanti. Quattro settimane a corpo libero prima di caricare, poi +2 kg per volta."},
+    {n:"Goblet squat con pausa",p:"3×10–12 · 2\" in buca",r:"90\"",
+      h:"SECONDO STIMOLO QUADRICIPITE — pausa piena senza rimbalzo. È l'esercizio in cui hai la posizione migliore: busto eretto, ROM pieno. Disco alto contro lo sterno, gomiti stretti."},
+    {n:"Leg curl TRX",p:"3×6–8",r:"90\"",
       h:"FLESSIONE DEL GINOCCHIO — bacino alto, linea spalle-anche-ginocchia. Progressione: eccentrica 4\" → pausa 1\" in contrazione → monopodalico. Se crampa, fermati a 6."},
-    {g:"C2",n:"Copenhagen",p:cp.p,r:"60\" poi C1",h:"ADDUZIONE — seconda seduta settimanale sul punto debole. "+cp.h},
-    {g:"D1",n:"Clamshell con elastico",p:"3×12–15/lato",r:"45\" poi D2",
-      h:"ABDUZIONE — l'unico lavoro diretto sul gluteo medio. Cuscino tra le ginocchia se punge."},
-    {g:"D2",n:"Calf raise una gamba, pausa 2\" in basso",p:"3×10–15",r:"45\" poi D3"},
-    {g:"D3",n:"Suitcase deadlift",p:"3×8/lato · da 8–10 kg",r:"45\" poi D1",
-      h:"Un manubrio a fianco del corpo, stacco da terra con schiena neutra. Allena il gesto che ti ha irritato la lombare: raccogliere pesi da terra. +2 kg a settimana — in due mesi raccogliere 20 kg diventa banale. Obliqui e quadrato dei lombi come il carry, ma con il sollevamento dentro."},
-    {g:"E1",n:"90/90 con lift-off",p:"3×5/lato · tenuta 5\"",r:"30\" poi E2",
-      h:"ROTAZIONE D'ANCA — stacca il ginocchio anteriore senza usare le mani. Flessione e rotazione insieme: il pattern della sella."},
-    {g:"E2",n:"Standing fire hydrant",p:"3×8/lato",r:"30\" poi E1",
-      h:"ABDUZIONE IN CARICO — ginocchio che sale davanti e ruota in fuori. Progressione: appoggio pieno al rack → due dita → niente → elastico sopra le ginocchia."},
-    {n:"Wall sit caricato",p:"3×30\" · disco 10–15 kg",r:"60\"",
-      h:"In chiusura. Quando reggi 3×45\" con 15–20 kg, passa al monopodalico a 60°, 15–20\"/lato: è anche la misura dell'asimmetria."}
+    {n:"Standing fire hydrant",p:"3×8/lato",r:"60\"",
+      h:"ABDUTTORI — ginocchio che sale davanti e ruota in fuori. Progressione: appoggio pieno al rack → due dita → niente → elastico sopra le ginocchia."},
+    {n:"Copenhagen · B",p:cp.p,r:"60\"",h:"ADDUTTORI — "+cp.h},
+    {g:"C1",n:"Side plank thread the needle",p:"3×10/lato",r:"45\" poi C2",
+      h:"ROTAZIONE TORACICA — in side plank porti il braccio libero sotto il corpo ruotando il torace, poi riapri. La rotazione viene dal tratto toracico, il bacino resta bloccato. Lento, senza slancio."},
+    {g:"C2",n:"Calf raise una gamba, pausa 2\" in basso",p:"3×10–15",r:"45\" poi C1"},
+    {n:"Suitcase deadlift",p:"3×8/lato · da 8–10 kg",r:"90\"",
+      h:"Un manubrio a fianco del corpo, stacco da terra con colonna NEUTRA — né arrotondata né inarcata. Spalle livellate: il carico da un lato ti tira giù e il tuo compito è non lasciarglielo fare. +2 kg a settimana."}
   ];
-  if(w>=8) list.splice(4,0,{n:"Stacco da terra",p:"3×5–6 · leggero",r:"2–3'",
-    h:"In alternanza con l'RDL, non insieme."});
-  return list;
 }
+
 function mobility(){
   return [{n:"Camminata",p:"45–60' · passo sostenuto",r:"—",
     h:"Non interferisce con l'ipertrofia e favorisce il recupero. Costa 200–250 kcal: aggiungi uno spuntino, o il surplus se ne va."}];
@@ -639,7 +625,7 @@ var render=function render(){
   else if(view==="diario") h+=viewDiary();
   else h+=viewGuide();
 
-  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v17 · 21 ott</span>'+
+  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v19 · 31 ott</span>'+
      '<button id="reset">Azzera tutto</button></div>';
   app.innerHTML=h;
   try{ wire(); }catch(err){ showErr("wire: "+err.message); }
