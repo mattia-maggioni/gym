@@ -373,7 +373,9 @@ function stepUpFor(w){
 
 function upperWarm(){
   return [{n:"Face pull elastico + rotazione esterna",p:"2×15 · 2×12/lato",r:"30\"",warm:true,
-    h:"Attivazione, non allenamento. Tienilo leggero: prepara extrarotatori e controllo scapolare."}];
+    h:"Attivazione, non allenamento. Tienilo leggero: prepara extrarotatori e controllo scapolare."},
+  {n:"Reverse plank",p:"2×20–30\" · ginocchia piegate",r:"30\"",warm:true,
+      h:"Attivazione: catena posteriore, glutei ed estensione toracica. Tienilo leggero, non è lavoro vero. Ginocchia piegate e piedi a terra finché il ginocchio fa male in estensione; poi passa alla versione tesa. Glutei contratti, bacino alto, collo in linea con la colonna."}];
 }
 
 function upperA(){
@@ -430,6 +432,8 @@ function lowerA(w){
       h:"Lombare schiacciata a terra, movimento dal bacino non dallo slancio delle gambe."},
     {g:"C3",n:"Calf raise su rialzo, pausa 2\" in basso",p:"3×12–15",r:"45\" poi C1",
       h:"La pausa in allungamento lavora anche la dorsiflessione: knee-to-wall 8 cm a destra, 10 a sinistra."},
+    {n:"Reverse plank · A",p:"3×10–12 · pausa 2\" in alto",r:"60\"",
+      h:"CATENA POSTERIORE ED ESTENSIONE TORACICA — progressione: tenuta 3×20–30\" per due settimane → ripetizioni 3×10–12 con pausa in alto → disco sul bacino o una gamba sola. Ginocchia piegate finché il ginocchio fa male in estensione. Glutei contratti, collo in linea con la colonna, non buttare la testa indietro."},
     {n:"Wall sit caricato",p:"3×30–45\" · disco 10–15 kg",r:"60\"",
       h:"In chiusura. Piedi a larghezza anca, ginocchia a 90°, tibie verticali, posizione identica dal primo all'ultimo secondo. Quando reggi 3×45\" con 15–20 kg, passa al monopodalico a 60°, 15–20\"/lato."}
   ];
@@ -442,8 +446,11 @@ function lowerB(w){
       h:"ANCA BILATERALE PESANTE — bilanciere a contatto con la coscia, ginocchia morbide 15–20°, tibia verticale. Il fondo corsa è dove il bacino smette di ruotare: per te appena sotto il ginocchio. Inspira in cima e trattieni per tutta la ripetizione. Carica il bilanciere nel rack, mai da terra."},
     {n:"Bulgarian split squat",p:"3×8/lato",r:"90\"",
       h:"GINOCCHIO MONOPODALICO — piede anteriore più laterale, ginocchio verso il mignolo, peso su tallone e bordo esterno, busto leggermente avanti. Quattro settimane a corpo libero prima di caricare, poi +2 kg per volta."},
-    {n:"Goblet squat con pausa",p:"3×10–12 · 2\" in buca",r:"90\"",
-      h:"SECONDO STIMOLO QUADRICIPITE — pausa piena senza rimbalzo. È l'esercizio in cui hai la posizione migliore: busto eretto, ROM pieno. Disco alto contro lo sterno, gomiti stretti."},
+    (w<=2
+      ? {n:"Step-up su rialzo 20 cm",p:"3×10/lato · salita 3\" discesa 3\"",r:"90\"",
+         h:"SECONDO STIMOLO QUADRICIPITE — nelle settimane di calibrazione, quando lo squat di Lower A è ancora il goblet. Tutto il lavoro lo fa la gamba sopra: non spingere con quella a terra."}
+      : {n:"Goblet squat con pausa",p:"3×10–12 · 2\" in buca",r:"90\"",
+         h:"SECONDO STIMOLO QUADRICIPITE — pausa piena senza rimbalzo. È l'esercizio in cui hai la posizione migliore: busto eretto, ROM pieno. Disco alto contro lo sterno, gomiti stretti."}),
     {n:"Leg curl TRX",p:"3×6–8",r:"90\"",
       h:"FLESSIONE DEL GINOCCHIO — bacino alto, linea spalle-anche-ginocchia. Progressione: eccentrica 4\" → pausa 1\" in contrazione → monopodalico. Se crampa, fermati a 6."},
     {n:"Standing fire hydrant",p:"3×8/lato",r:"60\"",
@@ -452,6 +459,8 @@ function lowerB(w){
     {g:"C1",n:"Side plank thread the needle",p:"3×10/lato",r:"45\" poi C2",
       h:"ROTAZIONE TORACICA — in side plank porti il braccio libero sotto il corpo ruotando il torace, poi riapri. La rotazione viene dal tratto toracico, il bacino resta bloccato. Lento, senza slancio."},
     {g:"C2",n:"Calf raise una gamba, pausa 2\" in basso",p:"3×10–15",r:"45\" poi C1"},
+    {n:"Reverse plank · B",p:"3×10–12 · pausa 2\" in alto",r:"60\"",
+      h:"CATENA POSTERIORE ED ESTENSIONE TORACICA — progressione: tenuta 3×20–30\" per due settimane → ripetizioni 3×10–12 con pausa in alto → disco sul bacino o una gamba sola. Ginocchia piegate finché il ginocchio fa male in estensione. Glutei contratti, collo in linea con la colonna, non buttare la testa indietro."},
     {n:"Suitcase deadlift",p:"3×8/lato · da 8–10 kg",r:"90\"",
       h:"Un manubrio a fianco del corpo, stacco da terra con colonna NEUTRA — né arrotondata né inarcata. Spalle livellate: il carico da un lato ti tira giù e il tuo compito è non lasciarglielo fare. +2 kg a settimana."}
   ];
@@ -625,7 +634,7 @@ var render=function render(){
   else if(view==="diario") h+=viewDiary();
   else h+=viewGuide();
 
-  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v19 · 31 ott</span>'+
+  h+='<div class="foot"><span id="savestate">Dati salvati sul dispositivo</span><span class="ver">v22 · 31 ott</span>'+
      '<button id="reset">Azzera tutto</button></div>';
   app.innerHTML=h;
   try{ wire(); }catch(err){ showErr("wire: "+err.message); }
